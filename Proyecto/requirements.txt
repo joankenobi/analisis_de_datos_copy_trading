@@ -1,0 +1,5 @@
+numpy
+Pyrogram-1.4.12 
+environs-9.5.0 
+tgcrypto-1.2.3
+pymongo
