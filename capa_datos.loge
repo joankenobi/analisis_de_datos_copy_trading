@@ -1,0 +1,781 @@
+04/10/22 03:30:40 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 03:31:35 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 03:41:16 pm:, DEBUG, [InspectorsManager.py:69], value is: 2
+04/10/22 03:46:11 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 03:46:50 pm:, DEBUG, [InspectorsManager.py:69], value is: 2
+04/10/22 03:46:50 pm:, DEBUG, [ToolsPyrogram.py:101], value is: True
+04/10/22 03:47:32 pm:, WARNING, [selector_events.py:911], socket.send() raised exception.
+04/10/22 03:47:32 pm:, ERROR, [base_events.py:1738], Task exception was never retrieved
+future: <Task finished name='Task-40' coro=<Client.handle_updates() done, defined at /home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/client.py:525> exception=OSError(ConnectionResetError('Connection lost'))>
+Traceback (most recent call last):
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/client.py", line 552, in handle_updates
+    diff = await self.send(
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/methods/advanced/send.py", line 77, in send
+    r = await self.session.send(
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 382, in send
+    return await self.send(data, retries - 1, timeout)
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 382, in send
+    return await self.send(data, retries - 1, timeout)
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 382, in send
+    return await self.send(data, retries - 1, timeout)
+  [Previous line repeated 2 more times]
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 375, in send
+    raise e from None
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 362, in send
+    return await self._send(data, timeout=timeout)
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 316, in _send
+    raise e
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/session/session.py", line 313, in _send
+    await self.connection.send(payload)
+  File "/home/joan/anaconda3/envs/pasanti_venv/lib/python3.9/site-packages/pyrogram/connection/connection.py", line 83, in send
+    raise OSError(e)
+OSError: Connection lost
+04/10/22 03:47:42 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 03:48:01 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 03:48:01 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 03:48:02 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 03:48:02 pm:, INFO, [ToolsPyrogram.py:159],  type of value: <class 'coroutine'>
+04/10/22 03:48:02 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 03:48:02 pm:, INFO, [ToolsPyrogram.py:159],  type of value: <class 'coroutine'>
+04/10/22 03:48:02 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 03:48:02 pm:, INFO, [ToolsPyrogram.py:159],  type of value: <class 'coroutine'>
+04/10/22 03:48:02 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 03:48:02 pm:, INFO, [ToolsPyrogram.py:159],  type of value: <class 'coroutine'>
+04/10/22 03:48:02 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5597
+04/10/22 03:48:02 pm:, INFO, [ToolsPyrogram.py:159],  type of value: <class 'coroutine'>
+04/10/22 03:49:16 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 03:58:31 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 03:58:31 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 03:58:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 03:58:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 03:58:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 03:58:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 03:58:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5597
+04/10/22 04:01:46 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 04:02:06 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 04:02:06 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion False
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion False
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion False
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion False
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5597
+04/10/22 04:02:06 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion False
+04/10/22 04:02:26 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 04:06:40 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 04:06:40 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5597
+04/10/22 04:06:41 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:09:30 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 04:09:41 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 04:09:41 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5597
+04/10/22 04:09:42 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: True
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:10:07 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 04:18:50 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 04:18:50 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: {
+    "_": "Chat",
+    "id": -1001381384148,
+    "type": "channel",
+    "is_verified": false,
+    "is_restricted": false,
+    "is_creator": false,
+    "is_scam": false,
+    "is_fake": false,
+    "title": "Crypto Futures Spot Signals😘",
+    "username": "VIP_Futures_Spot_Signals",
+    "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADIa8xG3Gc2FQAEAIAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "small_photo_unique_id": "AgADIa8xG3Gc2FQ",
+        "big_file_id": "AQADBQADIa8xG3Gc2FQAEAMAAyywBNkW____zpOwFG4V9e0ABB4E",
+        "big_photo_unique_id": "AgADIa8xG3Gc2FQ"
+    },
+    "dc_id": 5,
+    "has_protected_content": false
+}
+						
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 04:18:50 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:21:43 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:21:51 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:21:51 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:50], is_once text: FTX Futures
+#CHZ/USD Take-Profit target 1 ✅
+Profit: 31.5091% 📈
+Period: 18 Hours 4 Minutes ⏰
+04/10/22 05:21:52 pm:, INFO, [InspectorsManager.py:51], is_once? True
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:50], is_once text: Binance Futures
+#LINK/USDT Take-Profit target 1 ✅
+Profit: 105.1632% 📈
+Period: 2 Days 5 Hours 44 Minutes ⏰
+04/10/22 05:21:52 pm:, INFO, [InspectorsManager.py:51], is_once? True
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:50], is_once text: Binance Futures
+#LUNA/USDT Take-Profit target 3 ✅
+Profit: 40.5117% 📈
+Period: 2 Hours 17 Minutes ⏰
+04/10/22 05:21:52 pm:, INFO, [InspectorsManager.py:51], is_once? True
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:21:52 pm:, DEBUG, [InspectorsManager.py:50], is_once text: FTX Futures
+#CRV/USD Take-Profit target 1 ✅
+Profit: 24.2915% 📈
+Period: 47 Minutes ⏰
+04/10/22 05:21:52 pm:, INFO, [InspectorsManager.py:51], is_once? True
+04/10/22 05:21:52 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:26:40 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:26:44 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:26:44 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:63], Inicia el manager is_valid
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:26:45 pm:, INFO, [InspectorsManager.py:50], is_once? True
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:63], Inicia el manager is_valid
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:26:45 pm:, INFO, [InspectorsManager.py:50], is_once? True
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:63], Inicia el manager is_valid
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:26:45 pm:, INFO, [InspectorsManager.py:50], is_once? True
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:63], Inicia el manager is_valid
+04/10/22 05:26:45 pm:, DEBUG, [InspectorsManager.py:47], Inicia el manager is_once
+04/10/22 05:26:45 pm:, INFO, [InspectorsManager.py:50], is_once? True
+04/10/22 05:26:45 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:35:26 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:35:32 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:35:32 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:35:32 pm:, DEBUG, [InspectorsManager.py:62], Inicia el manager is_valid
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:49], is_once?: True
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:65], self.is_once()?: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:35:32 pm:, DEBUG, [InspectorsManager.py:62], Inicia el manager is_valid
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:49], is_once?: True
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:65], self.is_once()?: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:35:32 pm:, DEBUG, [InspectorsManager.py:62], Inicia el manager is_valid
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:49], is_once?: True
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:65], self.is_once()?: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:35:32 pm:, DEBUG, [InspectorsManager.py:62], Inicia el manager is_valid
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:49], is_once?: True
+04/10/22 05:35:32 pm:, INFO, [InspectorsManager.py:65], self.is_once()?: False
+04/10/22 05:35:32 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:39:11 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:39:30 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:39:30 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:39:31 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:39:31 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:39:31 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:39:31 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:39:31 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:39:31 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:41:33 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:41:36 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:41:36 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:41:37 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:41:37 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:41:37 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:43:24 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:43:28 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:43:28 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5602
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: True
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5601
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:171], no se cumplio la primera condicion 
+							message.chat.id: -1001381384148
+							message.chat.id in list?: False
+							message.text or message.caption: False
+							message.chat.type: channel
+							message.chat: True
+						
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5600
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: True
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5599
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: True
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 5598
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:43:28 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: True
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:43:28 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					self.__inspectors[key]._chat_id == chat_id: False
+					
+04/10/22 05:43:28 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:46:22 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...
+04/10/22 05:52:12 pm:, INFO, [mongo_db_crud.py:25], Dirección de conexión dada
+04/10/22 05:52:12 pm:, INFO, [mongo_db_crud.py:41], Conectado a cluster con los DBs: (['admin', 'config', 'joan', 'joan33', 'joel', 'local', 'med_data']), DB fijado: (pasanti_test)
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 29788
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 29787
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): True
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:84], Managers.InspectorsManager... value is: 2
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:160], value is: True
+04/10/22 05:52:12 pm:, INFO, [ToolsPyrogram.py:163],  type of value: <class 'bool'>
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 29786
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 29785
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 3
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 4
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:160], value is: False
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:154], El menssage es: 29784
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:64], Inicia el manager is_valid
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:50], is_once?: True
+04/10/22 05:52:12 pm:, INFO, [InspectorsManager.py:68], once?: True
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 1
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): False
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:71], key inspectors?: 2
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:73], 
+					self.__inspectors[key].is_valid(self.__message): True
+					
+04/10/22 05:52:12 pm:, DEBUG, [InspectorsManager.py:84], Managers.InspectorsManager... value is: 2
+04/10/22 05:52:12 pm:, DEBUG, [ToolsPyrogram.py:160], value is: True
+04/10/22 05:52:12 pm:, INFO, [ToolsPyrogram.py:163],  type of value: <class 'bool'>
+04/10/22 05:53:26 pm:, INFO, [idle.py:77], Stop signal received (SIGINT). Exiting...

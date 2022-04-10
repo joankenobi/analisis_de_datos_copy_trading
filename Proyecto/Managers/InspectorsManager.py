@@ -5,6 +5,7 @@ from inspectors.InspectorBitcoinBullets import InspectorBitcoinBullets
 from inspectors.InspectorCoinCoach import InspectorCoinCoach
 from inspectors.InspectorHippo import InspectorHippo
 from inspectors.InspectorRussianInsiders import InspectorRussianInsiders
+from logging_base import loge
 
 #import time
 class InspectorsManager:
@@ -45,26 +46,41 @@ class InspectorsManager:
 		"""
 		text = getattr(self.__message,'caption',False) or getattr(self.__message,'text',False) or ''
 		if self.__once != text:
+
+			loge.info(f"is_once?: {bool(self.__once != text)}")
+			
 			self.__once = text
 			return True
 		else:
 			return False
 
-	def is_valid(self, chat_id:int):
+	def is_valid(self, chat_id:int)-> bool:
 		"""
 			Revisa si is_once se cumple para el mensaje y aplica un inspector valido segun el canal de telegram .
 			Si no se cumple devuelve false.
 
 				chat_id: es el numero ID del canal del mensaje.
 		"""
+		loge.debug(f"Inicia el manager is_valid")
 		is_valid = False
-		if self.is_once():
+		once = self.is_once()
+		if once:
+			loge.info(f"once?: {once}")
+
 			for key in self.__inspectors:
+
+				loge.debug(f"""
+					self.__inspectors[key].is_valid(self.__message): {self.__inspectors[key].is_valid(self.__message)}
+					""")
+				
 				if self.__inspectors[key].is_valid(self.__message) and self.__inspectors[key]._chat_id == chat_id:
+
+
 					is_valid = key
 					break	
 		if is_valid:
 			self.__is_valid = is_valid
+			loge.debug(f"{__name__}... value is: {is_valid}")
 		return bool(is_valid)
 
 	def get_data_inspector(self):

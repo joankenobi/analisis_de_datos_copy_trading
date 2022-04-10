@@ -22,7 +22,7 @@ def main():
   tools_pyrogram=ToolsPyrogram()
 
   if HISTORY:
-    ToolsPyrogram().get_history(app_tg,-1001381384148)
+    ToolsPyrogram().get_history(app_tg,-1001267170242)
     
   else:
     app_tg.add_handler(MessageHandler(tools_pyrogram.send_message, tools_pyrogram.channel_filter_crypto())) #  Manejador de mensajes (funcion callback, filtro)

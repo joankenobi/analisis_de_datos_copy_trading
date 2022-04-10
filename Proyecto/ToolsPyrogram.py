@@ -97,7 +97,9 @@ class ToolsPyrogram:
 
 		if (message.text or message.caption) and message.chat and message.chat.type == "channel" and message.chat.id in CHANNEL_IDS:
 			self.__inspectM.set_message(message) #  pasa el mensaje al inspector manager
-			return self.__inspectM.is_valid(chat_id)
+			value=self.__inspectM.is_valid(chat_id)
+			loge.debug(f"value is: {value}")
+			return value
 
 	def prepare_text(self,data, is_errors = False, symbol = ''):
 		"""
@@ -152,8 +154,12 @@ class ToolsPyrogram:
 				loge.debug(f"El menssage es: {message.message_id}")
 				try:
 					
-					value =  self.new_filter_crypto(client,message)
-					if  value:
+					if (message.text or message.caption) and message.chat and message.chat.type == "channel":
+						self.__inspectM.set_message(message) #  pasa el mensaje al inspector manager
+						value=self.__inspectM.is_valid(message.chat.id)
+						loge.debug(f"value is: {value}")
+					
+						if  value:
 							loge.info(f" type of value: {type(value)}")
 						#data = self.get_data(client)
 						#id= Mongodb().Insert_data("signals",data).inserted_id
@@ -161,6 +167,14 @@ class ToolsPyrogram:
 						#Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
 						#Mongodb().update_by_id("signals",id,"channel",message.chat.title)
 						#Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+					else:
+						loge.debug(f"""no se cumplio la primera condicion 
+							message.chat.id: {message.chat.id}
+							message.chat.id in list?: {bool(message.chat.id in CHANNEL_IDS)}
+							message.text or message.caption: {bool(message.text or message.caption)}
+							message.chat.type: {message.chat.type}
+							message.chat: {bool(message.chat)}
+						""")
 
 				except Exception as e:
 					loge.error(f"Se presento un error {e}")
