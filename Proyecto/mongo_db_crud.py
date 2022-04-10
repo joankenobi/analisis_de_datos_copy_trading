@@ -18,11 +18,11 @@ class Mongodb:
     def __init__(self,connection_string=None):
         try:
             if connection_string == None:
-                loge.debug(f"Dirección de conexión omitida")
+                loge.info(f"Dirección de conexión omitida")
                 pass
             else:
                 self._connection_string=connection_string 
-                loge.debug(f"Dirección de conexión dada")
+                loge.info(f"Dirección de conexión dada")
         
         except Exception as e:
 
@@ -38,7 +38,7 @@ class Mongodb:
         try:
             self._client= mongo.MongoClient(self._connection_string)
             self._db=self._client[name_db]
-            loge.debug(f"Conectado a cluster con los DBs: ({self._client.database_names()}), DB fijado: ({name_db})")
+            loge.info(f"Conectado a cluster con los DBs: ({self._client.database_names()}), DB fijado: ({name_db})")
             return self._db
 
         except Exception as e:
@@ -77,7 +77,7 @@ class Mongodb:
         """
         try:
 
-            return loge.debug( f"""Datos actualizados: {self._db[collection_name].update_one(
+            return loge.info( f"""Datos actualizados: {self._db[collection_name].update_one(
                 {'_id':ObjectId(_id)},
                 {"$set":{
                     update_tag:set

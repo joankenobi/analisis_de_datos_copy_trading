@@ -3,6 +3,9 @@
 *.env
 *.diff
 *.log
+*.loge
 *.pyc
 */capa_datos.*
 capa_datos.*
+Prueba/*
+*/Prueba

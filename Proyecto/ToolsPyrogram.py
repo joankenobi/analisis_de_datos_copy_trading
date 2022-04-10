@@ -5,6 +5,7 @@ from pyrogram.client import Client
 from pyrogram.types import Message
 from Managers.InspectorsManager import InspectorsManager
 from mongo_db_crud import Mongodb
+from logging_base import loge
 
 env = Env()
 env.read_env()
@@ -136,7 +137,7 @@ class ToolsPyrogram:
 		**info
 		})
 
-	async def get_history(self,client:Client, channel_id):
+	def get_history(self,client:Client, channel_id):
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
 				
@@ -144,22 +145,23 @@ class ToolsPyrogram:
 				
 				channel_id: es el numero ide del canal, grupo o chat.
 		"""
+		
+		db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test")
 		with client:
-			db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test")
-			for message in client.iter_history(channel_id,limit=50):
-				if  self.new_filter_crypto(client,message):
-					data = await self.get_data(client)
-					id=Mongodb().Insert_data("signals",data).inserted_id
-					Mongodb().update_by_id("signals",id,"timeStamp",message["date"])
-					Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
-					Mongodb().update_by_id("signals",id,"channel",message.chat.title)
-					Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+			for message in client.iter_history(channel_id,limit=5):
+				loge.debug(f"El menssage es: {message.message_id}")
+				try:
+					
+					value =  self.new_filter_crypto(client,message)
+					if  value:
+							loge.info(f" type of value: {type(value)}")
+						#data = self.get_data(client)
+						#id= Mongodb().Insert_data("signals",data).inserted_id
+						#Mongodb().update_by_id("signals",id,"timeStamp",message["date"])
+						#Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
+						#Mongodb().update_by_id("signals",id,"channel",message.chat.title)
+						#Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
 
-				
-				#if message.service:
-				#	print(message.service)
-				#print(pd.to_datetime(message["date"],
-				#					unit="s")-pd.Timedelta(4,"h"), 
-				#					message["message_id"], 
-				#					message.chat.title
-				#					)
+				except Exception as e:
+					loge.error(f"Se presento un error {e}")
+					

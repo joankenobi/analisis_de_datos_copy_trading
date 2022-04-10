@@ -8,7 +8,7 @@ from environs import Env
 env = Env() #  pide los datos de la .env
 env.read_env()
 PROD = env.bool('PROD',False) #  indica si se esta en modo produccion (normalmente falso)
-HISTORY = False
+HISTORY = True
 API_ID = env('API_ID_TELEGRAM') #  captura la key para la api de telegram
 API_HASH = env('API_HASH_TELEGRAM')
 PHONE = env('PHONE_NUMBER') 
@@ -34,7 +34,7 @@ def init_message(app_tg: ClientTg):
     Informa el  del programa y si está en test o en produccion al canal de consola y ademas establece un ping con la API de Binance.
   """
   app_tg.start()
-  app_tg.send_message(CHANNEL_ID_CONSOLE,'init read mode: '+('prod'if PROD else 'test') + 'and' + ('geting hist' if HISTORY else ""))
+  app_tg.send_message(CHANNEL_ID_CONSOLE,'init read mode: '+('prod'if PROD else 'test')  + (' and geting hist' if HISTORY else ""))
   app_tg.stop()
 
 if __name__ == '__main__':
