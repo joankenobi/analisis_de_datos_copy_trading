@@ -4,7 +4,7 @@ from pyrogram.handlers import MessageHandler
 from ToolsPyrogram import ToolsPyrogram
 from environs import Env
 import sys
-
+from logging_base import loge
 
 env = Env() #  pide los datos de la .env
 env.read_env()
@@ -24,9 +24,12 @@ def main():
   tools_pyrogram=ToolsPyrogram()
 
   if HISTORY:
-    
-    ToolsPyrogram().get_history(app_tg,CHANNEL_IDS[0],300)
-    sys.exit()
+      for id in CHANNEL_IDS:
+        
+        print(id)
+        ToolsPyrogram().get_history(app_tg,int(id),200)
+      
+      sys.exit()
   else:
     app_tg.add_handler(MessageHandler(tools_pyrogram.send_message, tools_pyrogram.channel_filter_crypto())) #  Manejador de mensajes (funcion callback, filtro)
 

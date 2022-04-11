@@ -91,8 +91,8 @@ class ToolsPyrogram:
 		if message.chat.title=="test read binance":
 			#captura los ide de los canales cual se reenvia un mensaje a test binance
 			print(str(message.forward_from_chat.id) +"="+ message.forward_from_chat.title)
-			print(message.text)
-			print(message.caption)
+			#print(message.text)
+			#print(message.caption)
 			chat_id = message.forward_from_chat.id
 
 		if (message.text or message.caption) and message.chat and message.chat.type == "channel" and message.chat.id in CHANNEL_IDS:
@@ -148,7 +148,7 @@ class ToolsPyrogram:
 				channel_id: es el numero ide del canal, grupo o chat.
 		"""
 
-		db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test")
+		db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test_id")
 		if limit==None:
 			limit=int(input("Ingrese la cantidad de datos a guardar: "))
 		n=0
@@ -163,19 +163,16 @@ class ToolsPyrogram:
 							value=self.__inspectM.is_valid(message.chat.id)
 							loge.debug(f"value is: {value}")
 						
-							if  value:
-								if self.__inspectM.get_data_inspector():
-									data = self.__inspectM.get_data()
-								
-								#loge.debug(f"data is: {type(data)}")
+							if  value and self.__inspectM.get_data_inspector():
+								data = self.__inspectM.get_data()						
 
-									id= Mongodb().Insert_data("signals",data).inserted_id
-									Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"])
-									Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
-									Mongodb().update_by_id("signals",id,"channel",message.chat.title)
-									Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+								id= Mongodb().Insert_data("signals",data).inserted_id
+								Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"])
+								Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
+								Mongodb().update_by_id("signals",id,"channel",message.chat.title)
+								Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
 								n+=1
-							loge.debug(f"n:{n}")
+							loge.info(f"n:{n}")
 							if n==limit:
 								break
 					else:
@@ -188,5 +185,5 @@ class ToolsPyrogram:
 							""")
 					
 			except Exception as e:
-					loge.error(f"Se presento un error {e}")
+					loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
 					
