@@ -24,8 +24,8 @@ def main():
   tools_pyrogram=ToolsPyrogram()
 
   if HISTORY:
-    for id in CHANNEL_IDS:
-      ToolsPyrogram().get_history(app_tg,id,300)
+    
+    ToolsPyrogram().get_history(app_tg,CHANNEL_IDS[0],300)
     sys.exit()
   else:
     app_tg.add_handler(MessageHandler(tools_pyrogram.send_message, tools_pyrogram.channel_filter_crypto())) #  Manejador de mensajes (funcion callback, filtro)

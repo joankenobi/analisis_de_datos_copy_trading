@@ -143,4 +143,4 @@ class InspectorHippo(Inspector):
 	@staticmethod
 	def _prepare_entry_zone_limits(entry_zone):
 		entry_zone_limits = np.linspace(float(min(entry_zone)),float(max(entry_zone)),num=3)
-		return entry_zone_limits
+		return entry_zone_limits.tolist()
