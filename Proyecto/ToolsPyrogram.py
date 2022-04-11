@@ -139,7 +139,7 @@ class ToolsPyrogram:
 		**info
 		})
 
-	def get_history(self,client:Client, channel_id):
+	def get_history(self,client:Client, channel_id,limit=None):
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
 				
@@ -147,35 +147,46 @@ class ToolsPyrogram:
 				
 				channel_id: es el numero ide del canal, grupo o chat.
 		"""
-		
+
 		db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test")
+		if limit==None:
+			limit=int(input("Ingrese la cantidad de datos a guardar: "))
+		n=0
 		with client:
-			for message in client.iter_history(channel_id,limit=5):
-				loge.debug(f"El menssage es: {message.message_id}")
-				try:
-					
+			try:
+				
+				for message in client.iter_history(channel_id):
+					loge.debug(f"El menssage es: {message.message_id}")
+						
 					if (message.text or message.caption) and message.chat and message.chat.type == "channel":
-						self.__inspectM.set_message(message) #  pasa el mensaje al inspector manager
-						value=self.__inspectM.is_valid(message.chat.id)
-						loge.debug(f"value is: {value}")
-					
-						if  value:
-							loge.info(f" type of value: {type(value)}")
-						#data = self.get_data(client)
-						#id= Mongodb().Insert_data("signals",data).inserted_id
-						#Mongodb().update_by_id("signals",id,"timeStamp",message["date"])
-						#Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
-						#Mongodb().update_by_id("signals",id,"channel",message.chat.title)
-						#Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+							self.__inspectM.set_message(message) #  pasa el mensaje al inspector manager
+							value=self.__inspectM.is_valid(message.chat.id)
+							loge.debug(f"value is: {value}")
+						
+							if  value:
+								if self.__inspectM.get_data_inspector():
+									data = self.__inspectM.get_data()
+								
+								#loge.debug(f"data is: {type(data)}")
+
+									id= Mongodb().Insert_data("signals",data).inserted_id
+									Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"])
+									Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
+									Mongodb().update_by_id("signals",id,"channel",message.chat.title)
+									Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+								n+=1
+							loge.debug(f"n:{n}")
+							if n==limit:
+								break
 					else:
 						loge.debug(f"""no se cumplio la primera condicion 
-							message.chat.id: {message.chat.id}
-							message.chat.id in list?: {bool(message.chat.id in CHANNEL_IDS)}
-							message.text or message.caption: {bool(message.text or message.caption)}
-							message.chat.type: {message.chat.type}
-							message.chat: {bool(message.chat)}
-						""")
-
-				except Exception as e:
+								message.chat.id: {message.chat.id}
+								message.chat.id in list?: {bool(message.chat.id in CHANNEL_IDS)}
+								message.text or message.caption: {bool(message.text or message.caption)}
+								message.chat.type: {message.chat.type}
+								message.chat: {bool(message.chat)}
+							""")
+					
+			except Exception as e:
 					loge.error(f"Se presento un error {e}")
 					

@@ -46,9 +46,7 @@ class InspectorsManager:
 		"""
 		text = getattr(self.__message,'caption',False) or getattr(self.__message,'text',False) or ''
 		if self.__once != text:
-
-			loge.info(f"is_once?: {bool(self.__once != text)}")
-			
+	
 			self.__once = text
 			return True
 		else:
@@ -61,17 +59,11 @@ class InspectorsManager:
 
 				chat_id: es el numero ID del canal del mensaje.
 		"""
-		loge.debug(f"Inicia el manager is_valid")
 		is_valid = False
 		once = self.is_once()
 		if once:
-			loge.info(f"once?: {once}")
 
 			for key in self.__inspectors:
-
-				loge.debug(f"""
-					self.__inspectors[key].is_valid(self.__message): {self.__inspectors[key].is_valid(self.__message)}
-					""")
 				
 				if self.__inspectors[key].is_valid(self.__message) and self.__inspectors[key]._chat_id == chat_id:
 

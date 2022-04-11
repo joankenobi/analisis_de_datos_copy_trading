@@ -3,6 +3,7 @@ from pyrogram import Client as ClientTg
 from pyrogram.handlers import MessageHandler
 from ToolsPyrogram import ToolsPyrogram
 from environs import Env
+import sys
 
 
 env = Env() #  pide los datos de la .env
@@ -14,6 +15,7 @@ API_HASH = env('API_HASH_TELEGRAM')
 PHONE = env('PHONE_NUMBER') 
 NAME_SESSION = env('NAME_SESSION')
 CHANNEL_ID_CONSOLE = env.int('CHANNEL_ID_CONSOLE') if PROD else env.int('CHANNEL_ID_CONSOLE_TEST')
+CHANNEL_IDS = env.list("CHANNEL_IDS")
 
 def main():
   app_tg=ClientTg(NAME_SESSION, API_ID, API_HASH) #  crea el cliente que se comunica con telegram
@@ -22,8 +24,9 @@ def main():
   tools_pyrogram=ToolsPyrogram()
 
   if HISTORY:
-    ToolsPyrogram().get_history(app_tg,-1001267170242)
-    
+    for id in CHANNEL_IDS:
+      ToolsPyrogram().get_history(app_tg,id,300)
+    sys.exit()
   else:
     app_tg.add_handler(MessageHandler(tools_pyrogram.send_message, tools_pyrogram.channel_filter_crypto())) #  Manejador de mensajes (funcion callback, filtro)
 
