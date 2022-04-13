@@ -93,7 +93,7 @@ class Inspector:
 		# return lines
 		return [line.strip() for line in lines if bool(line)]
 
-	def _get_symbol_message_by_text(self, search_word='#'):
+	def _get_symbol_message_by_text(self, search_word='#',seconds_currencies=("USD","USDT")):
 		"""
 			Busca una palabra clave en cada linea que permita ubicar los simbolos.
 		"""
@@ -119,9 +119,13 @@ class Inspector:
 		if before_symbol:
 			symbol_line = symbol_line.replace(before_symbol,'')
 
-		after_symbol = symbol_line.partition('USDT')[2]
+		seconds_currencies=("USD","USDT")
+
+		for currencie in seconds_currencies:
+		    if currencie in symbol_line:
+		        after_symbol = symbol_line.partition(currencie)[2]
 		
-		if after_symbol:
+		if after_symbol:	
 			symbol_line = symbol_line.replace(after_symbol,'')
 
 		symbol = symbol_line.replace(search_word,'').replace('/',"").strip()

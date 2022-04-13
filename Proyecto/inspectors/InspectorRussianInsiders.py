@@ -1,5 +1,6 @@
 from environs import Env
 from pyrogram.types.messages_and_media.message import Message
+from Proyecto.inspectors.Inspector import Inspector
 from inspectors.InspectorHippo import InspectorHippo
 
 env = Env()
@@ -8,7 +9,7 @@ env.read_env()
 ALL_LAVERAGE = env.bool('ALL_LAVERAGE',False)
 PERCENT_ALL_LAVERAGE = env.int('PERCENT_ALL_LAVERAGE',5)
 
-class InspectorRussianInsiders(InspectorHippo):
+class InspectorRussianInsiders(InspectorHippo,Inspector):
 
 	_chat_id:int = -1001277174399
 	_percent_leverage = PERCENT_ALL_LAVERAGE if ALL_LAVERAGE else 5
@@ -29,7 +30,7 @@ class InspectorRussianInsiders(InspectorHippo):
 		"""
 		try:
 			self._text_list = self._text_to_lines()
-			self._symbol_message = super(InspectorHippo,self)._get_symbol_message_by_text(search_word="$")
+			self._symbol_message = super(Inspector,self)._get_symbol_message_by_text(search_word="$")
 			self._symbol = self._get_symbol_by_text()
 			self._currencies = self._get_currencies_by_text()
 			self._is_future = self._get_is_future_by_text()

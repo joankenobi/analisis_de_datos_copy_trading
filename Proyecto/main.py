@@ -9,7 +9,7 @@ from logging_base import loge
 env = Env() #  pide los datos de la .env
 env.read_env()
 PROD = env.bool('PROD',False) #  indica si se esta en modo produccion (normalmente falso)
-HISTORY = True
+HISTORY = False
 API_ID = env('API_ID_TELEGRAM') #  captura la key para la api de telegram
 API_HASH = env('API_HASH_TELEGRAM')
 PHONE = env('PHONE_NUMBER') 
