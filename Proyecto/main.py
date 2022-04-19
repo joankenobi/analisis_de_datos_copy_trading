@@ -9,7 +9,7 @@ from logging_base import loge
 env = Env() #  pide los datos de la .env
 env.read_env()
 PROD = env.bool('PROD',False) #  indica si se esta en modo produccion (normalmente falso)
-HISTORY = False
+HISTORY = True
 API_ID = env('API_ID_TELEGRAM') #  captura la key para la api de telegram
 API_HASH = env('API_HASH_TELEGRAM')
 PHONE = env('PHONE_NUMBER') 
@@ -26,8 +26,8 @@ def main():
   if HISTORY:
       for id in CHANNEL_IDS:
         
-        print(id)
-        ToolsPyrogram().get_history(app_tg,int(id),200)
+        loge.info(f"id: {id}")
+        ToolsPyrogram().get_history(app_tg,int(id),300,"pasanti_test_russo")
       
       sys.exit()
   else:

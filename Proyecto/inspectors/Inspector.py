@@ -1,3 +1,4 @@
+from dataclasses import replace
 import os, sys, re, numpy as np
 from environs import Env
 from pyrogram.types.messages_and_media.message import Message
@@ -93,7 +94,7 @@ class Inspector:
 		# return lines
 		return [line.strip() for line in lines if bool(line)]
 
-	def _get_symbol_message_by_text(self, search_word='#',seconds_currencies=("USD","USDT")):
+	def _get_symbol_message_by_text(self, search_word='#',seconds_currencies=("USD","USDT"),search_word_f=""):
 		"""
 			Busca una palabra clave en cada linea que permita ubicar los simbolos.
 		"""
@@ -113,23 +114,22 @@ class Inspector:
 
 		if not symbol_line:
 			raise Exception('no word')
-		
+
 		before_symbol = symbol_line.partition(search_word)[0]
-
-		if before_symbol:
-			symbol_line = symbol_line.replace(before_symbol,'')
-
-		seconds_currencies=("USD","USDT")
-
-		for currencie in seconds_currencies:
-		    if currencie in symbol_line:
-		        after_symbol = symbol_line.partition(currencie)[2]
 		
-		if after_symbol:	
-			symbol_line = symbol_line.replace(after_symbol,'')
+		if before_symbol:
+			symbol_line = symbol_line.replace(before_symbol,"")
+		
+		for currencie in seconds_currencies:
+			if currencie in symbol_line:
+				after_symbol=symbol_line.partition(currencie)[2]
 
-		symbol = symbol_line.replace(search_word,'').replace('/',"").strip()
+		if after_symbol: 
+			symbol_line= symbol_line.replace(after_symbol,"")
+		
+		symbol = symbol_line.replace("#","").replace(search_word,'').replace(search_word_f,'').replace('/',"").strip()
 		return symbol
+
 	
 	def _get_symbol_by_text(self):
 		"""

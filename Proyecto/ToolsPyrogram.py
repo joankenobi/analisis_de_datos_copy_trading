@@ -1,4 +1,6 @@
-import json, sys, os #  libreria para pasar Json a ditc e inversa, Libreria que maneja variables en el interprete.
+import json, sys, os
+from typing import List #  libreria para pasar Json a ditc e inversa, Libreria que maneja variables en el interprete.
+from datetime import datetime as dt
 from environs import Env 
 from pyrogram import filters
 from pyrogram.client import Client
@@ -139,7 +141,7 @@ class ToolsPyrogram:
 		**info
 		})
 
-	def get_history(self,client:Client, channel_id,limit=None):
+	def get_history(self,client:Client, channel_id,limit=None, data_base="DB_test"):
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
 				
@@ -148,13 +150,13 @@ class ToolsPyrogram:
 				channel_id: es el numero ide del canal, grupo o chat.
 		"""
 
-		db=Mongodb("mongodb://localhost:27017/").set_db("pasanti_test_id")
+		db=Mongodb("mongodb://localhost:27017/").set_db(data_base)
 		if limit==None:
 			limit=int(input("Ingrese la cantidad de datos a guardar: "))
 		n=0
 		with client:
 			try:
-				
+				message:Message
 				for message in client.iter_history(channel_id):
 					loge.debug(f"El menssage es: {message.message_id}")
 						
@@ -167,7 +169,8 @@ class ToolsPyrogram:
 								data = self.__inspectM.get_data()						
 
 								id= Mongodb().Insert_data("signals",data).inserted_id
-								Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"])
+								Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"]) #  Nota: La fecha del mensaje en el objeto tipo Message esta en la zona horraria adecuada, pero al sacar el atributo aparece en UTC=+00
+								Mongodb().update_by_id("signals",id,"date",dt.fromtimestamp(message["date"])) # con datetime.fromtimestamp la fecha es extraida en el timezone correcto
 								Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
 								Mongodb().update_by_id("signals",id,"channel",message.chat.title)
 								Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
@@ -186,4 +189,33 @@ class ToolsPyrogram:
 					
 			except Exception as e:
 					loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
-					
+			
+	def get_message_from_history(self,client:Client, channel_id=None, message_id=None)-> Message:
+		"""Retorna el mensaje indicado por el id y el canal.
+
+		Args:
+			client (Client): Cliente para conectar con la API
+			channel_id (int, optional): id del canal donde se encuentra el mensaje. Defaults to None.
+			message_id (int, optional): id del mensaje buscado. Defaults to None.
+		"""
+		
+		with client:
+			try:
+				message:Message
+				for message in client.iter_history(channel_id):
+					if message.message_id == message_id:
+						print(f"El message.date.real: {message.date.real}")
+						print(f"El message.date: {message.date}")
+						print(f"El message.link: {message.link}")
+
+						# metodo ideal para capturar la fecha aportada por telegram directamente de message
+						message_list:list=message.__str__().splitlines()
+						for line in message_list:
+							if '"date"' in line:
+								fecha=line.replace('"','').replace('date','').strip()
+								print(f"""El message.date. my zone: {fecha}""")
+			
+			except Exception as e:
+				loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
+
+				

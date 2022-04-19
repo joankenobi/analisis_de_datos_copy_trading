@@ -1,6 +1,5 @@
 from environs import Env
 from pyrogram.types.messages_and_media.message import Message
-from Proyecto.inspectors.Inspector import Inspector
 from inspectors.InspectorHippo import InspectorHippo
 
 env = Env()
@@ -9,7 +8,7 @@ env.read_env()
 ALL_LAVERAGE = env.bool('ALL_LAVERAGE',False)
 PERCENT_ALL_LAVERAGE = env.int('PERCENT_ALL_LAVERAGE',5)
 
-class InspectorRussianInsiders(InspectorHippo,Inspector):
+class InspectorRussianInsiders(InspectorHippo):
 
 	_chat_id:int = -1001277174399
 	_percent_leverage = PERCENT_ALL_LAVERAGE if ALL_LAVERAGE else 5
@@ -30,7 +29,7 @@ class InspectorRussianInsiders(InspectorHippo,Inspector):
 		"""
 		try:
 			self._text_list = self._text_to_lines()
-			self._symbol_message = super(Inspector,self)._get_symbol_message_by_text(search_word="$")
+			self._symbol_message = self._get_symbol_message_by_text(search_word="$")
 			self._symbol = self._get_symbol_by_text()
 			self._currencies = self._get_currencies_by_text()
 			self._is_future = self._get_is_future_by_text()
@@ -42,6 +41,43 @@ class InspectorRussianInsiders(InspectorHippo,Inspector):
 			self._trailing_configuration = self._get_trailing_configuration_by_text()
 		except:
 			self.set_errors()
+
+	def _get_symbol_message_by_text(self, search_word='#',seconds_currencies=("USD","USDT"),search_word_f=""):
+		"""
+			Busca una palabra clave en cada linea que permita ubicar los simbolos.
+			El mismo que en Inspector padre
+		"""
+		symbol = ''
+
+		for line in self._text_list:
+			if search_word in line:
+				symbol_line = line
+				break
+
+		# si no lo tengo todavia, lo busco en cualquier palabra con USDT
+		if not symbol_line:
+			for word in self._text.upper().split():
+				if 'USDT' in word:
+					symbol_line = word
+					break
+
+		if not symbol_line:
+			raise Exception('no word')
+
+		before_symbol = symbol_line.partition(search_word)[0]
+		
+		if before_symbol:
+			symbol_line=symbol_line.replace(before_symbol,"")
+		
+		for currencie in seconds_currencies:
+			if currencie in symbol_line:
+				after_symbol=symbol_line.partition(currencie)[2]
+
+		if after_symbol: 
+			symbol_line= symbol_line.replace(after_symbol,"")
+		
+		symbol = symbol_line.replace("#","").replace(search_word,'').replace(search_word_f,'').replace('/',"").strip()
+		return symbol
 
 	def _get_entry_targets_by_text(self):
 		try:

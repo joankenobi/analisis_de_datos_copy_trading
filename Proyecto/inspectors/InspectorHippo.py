@@ -14,7 +14,7 @@ class InspectorHippo(Inspector):
 	_chat_id:int = -1001381384148
 	_percent_leverage = PERCENT_ALL_LAVERAGE if ALL_LAVERAGE else 5
 	_free = True
-
+	
 	# Constructor Herencia
 	def __init__(self, message: Message):
 		super().__init__(message)
