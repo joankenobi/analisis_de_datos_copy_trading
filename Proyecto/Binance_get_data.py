@@ -1,5 +1,4 @@
 # IMPORTS
-#%%
 import pandas as pd
 import math
 import os.path
@@ -14,31 +13,24 @@ env = Env()
 env.read_env()
 
 PROD = env.bool('PROD',False)
+### API
 API_KEY_BINANCE = env('API_KEY_BINANCE')
 SECRET_KEY_BINANCE = env('SECRET_KEY_BINANCE')
 
-#%%
-### API
-binance_api_key = API_KEY_BINANCE    #Enter your own API-key here
-binance_api_secret = SECRET_KEY_BINANCE #Enter your own API-secret here
-
-#%%
 ### CONSTANTS
 binsizes = {"1m": 1, "5m": 5, "1h": 60, "1d": 1440}
 batch_size = 750
-binance_client = Client(api_key=binance_api_key, api_secret=binance_api_secret)
+binance_client = Client(api_key=API_KEY_BINANCE, api_secret=SECRET_KEY_BINANCE)
 
-
-#%%
 ### FUNCTIONS
-def minutes_of_new_data(symbol:str, kline_size, data, source):
+def minutes_of_new_data(symbol:str, kline_size:str, data:pd.DataFrame, source="Binance"):
     """Retorna el datetime del dato mas viejo y el mas nuevo.
 
     Args:
-        symbol (srt): Simbolo que se desea conseguir los dato (BTCUSDT)
-        kline_size (_type_): _description_
-        data (_type_): _description_
-        source (_type_): _description_
+        symbol (srt): Simbolo que se desea conseguir los datos (BTCUSDT)
+        kline_size (str): Indica es tipo de periodo de los datos, los valores pueden ser: "1m", "5m", "1h", "1d". 
+        data (df): df de datos ya creado anteriormente.
+        source (str): Origen de los datos, siempre Binance
 
     Returns:
         Tuple: los datetime (old, new)
@@ -49,13 +41,12 @@ def minutes_of_new_data(symbol:str, kline_size, data, source):
         parse_time=parser.parse(str_time)
         post_oldtime=timedelta(minutes=binsizes[kline_size]) #tiempo despues de la ultima data, for not repeat  
         old=datetime.utcfromtimestamp(parse_time.timestamp())+post_oldtime
-        
-        #old = parser.parse(            str(data["date_myUTC"].iloc[-1])) # si hay data busca la ultima fecha de la data y la guarda en old
+
         loge.info(f"""old: {old}""")
     
     elif source == "binance": 
         old = datetime.strptime(
-            '1 Jan 2022', '%d %b %Y'
+            '1 Jan 2017', '%d %b %Y'
             )# si no hay data y la fuente es binance la fecha vieja es del 2017
         loge.info(f"""old: {old}""")
 
@@ -68,16 +59,16 @@ def minutes_of_new_data(symbol:str, kline_size, data, source):
 
     return old, new
 
-def get_all_binance(symbol, kline_size, save = False):
+def get_all_binance(symbol:str, kline_size:str, save = False):
     """Genera un dataframe con todos los datos historicos posibles de un simbolo.
 
     Args:
-        symbol (_type_): _description_
-        kline_size (_type_): _description_
-        save (bool, optional): _description_. Defaults to False.
+        symbol (str): Simbolo que se desea conseguir los datos (BTCUSDT)
+        kline_size (str): Indica es tipo de periodo de los datos, los valores pueden ser: "1m", "5m", "1h", "1d".
+        save (bool, optional): Idica si se guarda o no el df en formato .pickle. Defaults to False.
 
     Returns:
-        _type_: _description_
+        df: Dataframe de los datos historicos para el simbolo indicado.
     """
     filename = '%s-%s-data.pickle' %(symbol, kline_size)
 
@@ -98,6 +89,7 @@ def get_all_binance(symbol, kline_size, save = False):
     available_data = math.ceil(
         delta_min/binsizes[kline_size]
         ) # Retorna en cantida de tiempo de data diponible para cargar
+    
     loge.info(f"""
     oldest_point: {oldest_point}
     newest_point: {newest_point} 
@@ -115,17 +107,16 @@ def get_all_binance(symbol, kline_size, save = False):
 
     klines = binance_client.get_historical_klines(
         symbol, kline_size, oldest_point.strftime("%d %b %Y %H:%M:%S"), 
-        newest_point.strftime("%d %b %Y %H:%M:%S")
-        ) # obtiene los datos del simbol desde oldest to newest
+        newest_point.strftime("%d %b %Y %H:%M:%S")) # obtiene los datos del simbol desde oldest to newest
+    
     loge.info(f"""Colectando datos dentro de estas dos fechas:
     oldest_point.strftime: {oldest_point.strftime('%d %b %Y %H:%M:%S')} UNIX
     newest_point.strftime: {newest_point.strftime('%d %b %Y %H:%M:%S')} UNIX""")
 
-    data = pd.DataFrame(
-        klines, columns = ['timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_av', 'trades', 'tb_base_av', 'tb_quote_av', 'ignore' ]
-        ) # cosntruye el data frame con los datos
+    data = pd.DataFrame(klines, columns = [
+        'timestamp', 'open', 'high', 'low', 'close', 'volume', 'close_time', 
+        'quote_av', 'trades', 'tb_base_av', 'tb_quote_av', 'ignore']) # cosntruye el data frame con los datos
 
-    #data['date_00UTC'] = pd.to_datetime(data['timestamp'], unit='ms', utc=True)
     data['date_myUTC'] = data['timestamp'].apply(lambda x: datetime.fromtimestamp(x/1000))
     
     if len(data_df) > 0: # si hay data existente crea un df temp y la agrga a la data existentente
