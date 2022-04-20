@@ -217,5 +217,3 @@ class ToolsPyrogram:
 			
 			except Exception as e:
 				loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
-
-				
