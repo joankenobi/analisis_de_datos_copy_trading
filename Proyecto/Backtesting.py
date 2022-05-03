@@ -42,7 +42,7 @@ class Backtecting:
             
             mask:pd.Series=df_symbol_data["date_myUTC"]
 
-            loge.info(f"""date_start: {str(date_start)}""") 
+            loge.info(f"""date_start_by_sygnal: {str(date_start)}""") 
             loge.info(f"""last_date_symbol: {str(df_symbol_data["date_myUTC"].iloc[-1])}""") 
             
             mask=mask.between(date_start,df_symbol_data["date_myUTC"].iloc[-1]) # Usa la fecha del ultimo dato guardado - Between no funcionaba con los str???? no se por que.
@@ -72,15 +72,24 @@ class Backtecting:
         """
 
         dates={}
-        for operate in operates_data:        
+
+        df_symbol_data.loc[:,["open","high","low","close"]]=df_symbol_data.loc[:,["open","high","low","close"]].astype(float) # Convertir lso datos numericos del precio en numeros flotantes.
         
+        for operate in operates_data:        
+            
+            #loge.info(f"""operate: {type(operate)}""") 
+            #loge.info(f"""df_symbol_data["open"]: {type(df_symbol_data["open"].iloc[0])}""") 
+
             mask=(df_symbol_data["open"]>=operate) | (df_symbol_data["high"]>=operate) | (df_symbol_data["low"]>=operate) | (df_symbol_data["close"]>=operate)
-            date=df_symbol_data[mask].iloc[1]["date_myUTC"]
+
+            date=df_symbol_data[mask].iloc[0]["date_myUTC"] # El primer valor (tiempo mas lejano) que cumple la mask.
 
             if date:
                 dates[operate]=date
+            else:
+                date[operate]=False
 
-            return dates
+        return dates
 
     def update_backtesting(self,_id, tagname, set,host="mongodb://localhost:27017/", collection="signals"):
         
@@ -104,7 +113,7 @@ class Backtecting:
         for i in range(2):#len(df_sygnal_data)):
             
             # Get symbol data
-            loge.info(f"get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}")
+            loge.info(f"""get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}""")
             
             df_symbol_data = self.get_data_about_symbol(df_sygnal_data.loc[i,"symbol"])
            
@@ -113,16 +122,21 @@ class Backtecting:
             
             temp_df_symbol=self.slice_df_by_date(df_symbol_data=df_symbol_data,date_start=date_start)
             entry_targets=df_sygnal_data.iloc[i]["entry_targets"]
-            loge.info(f"""entry_targets: {entry_targets} Type:  {type(entry_targets)}""") 
+            
+            loge.info(f"""entry_targets: {entry_targets} Type:  {type(entry_targets)}""")
+
             dates_entry:dict=self.find_in_OHLC_line(operates_data=entry_targets, df_symbol_data=temp_df_symbol)
             loge.info(f"dates_entry: {dates_entry}")
         #    
-        #    # Get date stoploss
-        #    date_start=list(dates_entry.values())[0]
-        #    temp_df_symbol=self.slice_df_by_date(df_symbol_data=temp_df_symbol,date_start=date_start)
-        #    stop_targets=df_sygnal_data.iloc[i]["stop_targets"]
-        #    dates_stoploss:dict=self.find_in_OHLC_line(operates_data=stop_targets, df_symbol_data=temp_df_symbol)
-        #    loge.info(f"dates_stoploss: {dates_stoploss}")
+            # Get date stoploss
+            date_start=list(dates_entry.values())[0]
+            temp_df_symbol=self.slice_df_by_date(df_symbol_data=temp_df_symbol,date_start=date_start)
+
+            stop_targets=df_sygnal_data.iloc[i]["stop_targets"]
+            loge.info(f"""stop_targets: {stop_targets} Type:  {type(stop_targets)}""")
+            
+            dates_stoploss:dict=self.find_in_OHLC_line(operates_data=stop_targets, df_symbol_data=temp_df_symbol)
+            loge.info(f"dates_stoploss: {dates_stoploss}")
         #    
         #    #Get dates_profit
         #    dates_end=list(dates_stoploss.values())[0]
