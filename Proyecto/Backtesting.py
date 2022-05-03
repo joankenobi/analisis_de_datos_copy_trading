@@ -39,19 +39,27 @@ class Backtecting:
         """
 
         if date_end==None: # si no hay fecha de fin
+            
             mask:pd.Series=df_symbol_data["date_myUTC"]
-            mask=mask.between(str(date_start),str(df_symbol_data["date_myUTC"].iloc[-1])) # Usa la fecha del ultimo dato guardado
-            temp_df_symbol=df_symbol_data[mask]
-            loge.info(f"symbol_data slice only start {str(date_start)} - {str(date_end)}")
+
+            loge.info(f"""date_start: {str(date_start)}""") 
+            loge.info(f"""last_date_symbol: {str(df_symbol_data["date_myUTC"].iloc[-1])}""") 
+            
+            mask=mask.between(date_start,df_symbol_data["date_myUTC"].iloc[-1]) # Usa la fecha del ultimo dato guardado - Between no funcionaba con los str???? no se por que.
+            
+            temp_df_symbol:pd.DataFrame=df_symbol_data[mask]
+            loge.info(f"""symbol_data slice only start {str(date_start)} - {temp_df_symbol["date_myUTC"].iloc[-1]}""")
             return temp_df_symbol
         
+        loge.info(f"""date_start: {str(date_start)}""") 
+        loge.info(f"""date_end: {str(date_end)}""") 
         mask:pd.Series=df_symbol_data["date_myUTC"]
-        mask=mask.between(str(date_start),str(date_end))
+        mask=mask.between(date_start,date_end)
         temp_df_symbol=df_symbol_data[mask]
         loge.info(f"symbol_data slice {str(date_start)} - {str(date_end)}")
         return temp_df_symbol
 
-    def find_in_OHLC_line(self,operates_data,df_symbol_data:pd.DataFrame):#-> dict:
+    def find_in_OHLC_line(self,operates_data,df_symbol_data:pd.DataFrame)-> dict:
         
         """Consigue y compara los datos de operación con los precios indicados por el historial de precios.
 
@@ -66,7 +74,6 @@ class Backtecting:
         dates={}
         for operate in operates_data:        
         
-            loge.info(f"""operate: {type(operate)} - {type(df_symbol_data["open"].iloc[0])}""")
             mask=(df_symbol_data["open"]>=operate) | (df_symbol_data["high"]>=operate) | (df_symbol_data["low"]>=operate) | (df_symbol_data["close"]>=operate)
             date=df_symbol_data[mask].iloc[1]["date_myUTC"]
 
@@ -97,20 +104,16 @@ class Backtecting:
         for i in range(2):#len(df_sygnal_data)):
             
             # Get symbol data
-            loge.info(f"i: {i}")
-            loge.info(f"self: {type(self)}")
-            loge.info(
-            f"""
-            df_sygnal_data.loc[i,"symbol"] ->> {df_sygnal_data.loc[i,"symbol"]}
+            loge.info(f"get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}")
             
-            """)
-
             df_symbol_data = self.get_data_about_symbol(df_sygnal_data.loc[i,"symbol"])
            
             # Get date entry
             date_start=df_sygnal_data.loc[i,"date"]
+            
             temp_df_symbol=self.slice_df_by_date(df_symbol_data=df_symbol_data,date_start=date_start)
             entry_targets=df_sygnal_data.iloc[i]["entry_targets"]
+            loge.info(f"""entry_targets: {entry_targets} Type:  {type(entry_targets)}""") 
             dates_entry:dict=self.find_in_OHLC_line(operates_data=entry_targets, df_symbol_data=temp_df_symbol)
             loge.info(f"dates_entry: {dates_entry}")
         #    
