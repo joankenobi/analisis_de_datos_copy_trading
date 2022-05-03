@@ -1,3 +1,4 @@
+Pasantias/ATOMBTC-5m-data.pickle
 */__pycache__
 *.session*
 *.env
@@ -10,3 +11,5 @@ capa_datos.*
 Prueba/*
 */Prueba
 *.pickle
+../*.pickle
+ATOMBTC-5m-data.pickle

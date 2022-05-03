@@ -27,7 +27,7 @@ def main():
       for id in CHANNEL_IDS:
         
         loge.info(f"id: {id}")
-        ToolsPyrogram().get_history(app_tg,int(id),300,"pasanti_test_russo")
+        ToolsPyrogram().get_history(app_tg,int(id),30,"Back_prueba")
       
       sys.exit()
   else:

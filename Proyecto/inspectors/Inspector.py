@@ -141,8 +141,18 @@ class Inspector:
 			raise Exception('no word')
 	
 	def _get_currencies_by_text(self, segundary:str = 'USDT'):
-		if self._symbol:
+		if "USDT" in self._symbol:
 			data = self._symbol.replace(segundary,'')
+			return {
+				'primary':data,
+				'segundary':segundary,
+			}
+
+		elif "/" in self._symbol_message:
+			symbol=self._symbol_message.strip().split("/")	
+			data= symbol[0]
+			segundary= symbol[1]
+
 			return {
 				'primary':data,
 				'segundary':segundary,
