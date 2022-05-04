@@ -24,10 +24,12 @@ def main():
   tools_pyrogram=ToolsPyrogram()
 
   if HISTORY:
-      for id in CHANNEL_IDS:
+      #for id in CHANNEL_IDS:
+      if 1:
+        id=-1001381384148
         
         loge.info(f"id: {id}")
-        ToolsPyrogram().get_history(app_tg,int(id),30,"Back_prueba")
+        ToolsPyrogram().get_history(app_tg,int(id),30,"CFS_prueba")
       
       sys.exit()
   else:
