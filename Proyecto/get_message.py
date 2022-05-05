@@ -22,7 +22,7 @@ def main():
     init_message(app_tg)
     tools_pyrogram=ToolsPyrogram()
     
-    message_id=5316
+    message_id=203
     channel_id=-1001381384148
 
     ToolsPyrogram().get_message_from_history(app_tg,channel_id,message_id)

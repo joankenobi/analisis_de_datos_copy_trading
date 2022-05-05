@@ -2,6 +2,7 @@ import re, numpy as np
 from environs import Env
 from pyrogram.types.messages_and_media.message import Message
 from inspectors.Inspector import Inspector
+from logging_base import loge
 
 env = Env()
 env.read_env()
@@ -108,7 +109,12 @@ class InspectorHippo(Inspector):
 		return self._get_targets_list(self._take_profit_targets_word)
 
 	def _get_stop_targets_by_text(self):
-		return self._get_targets_list(self._stop_targets_word)
+		
+		stop_loss=self._get_targets_list(self._stop_targets_word)
+		if stop_loss==None:
+			return [self._get_stop_targets_by_percent()]
+		return stop_loss
+
 
 	@staticmethod
 	def is_valid(message: Message):
@@ -117,22 +123,32 @@ class InspectorHippo(Inspector):
 		return False
 
 	# Method Capture targets
-	def _get_targets_list( self, targest_type:str, select_data = "\d\)"):
+	def _get_targets_list( self, targest_type_word:str, select_data = "\d\)"):
 		try:
-			if not targest_type in self._text:
-				return []
+			if not targest_type_word in self._text:
+				return None
 			data_list=[]
 			t_index = 0
-			t_index = self._search_word_in_lines(self._text_list, targest_type) 
-			while t_index+1 < len(self._text_list) and re.match(select_data, self._text_list[t_index+1]):
-				t_index += 1
-				split_targets=self._text_list[t_index].split()
-				for data in split_targets:
-					if re.match('\d', data) and not re.search('\)$', data) and not re.search('\%$', data):
-						data_list.append(float(data))
+			t_index = self._search_word_in_lines(self._text_list, targest_type_word) 
+			num=None
+			
+			if t_index+1 < len(self._text_list) and re.match(select_data, self._text_list[t_index+1]):
+				while t_index+1 < len(self._text_list) and re.match(select_data, self._text_list[t_index+1]):
+					t_index += 1
+					split_targets=self._text_list[t_index].split()
+					if len(split_targets)>0:
+						for data in split_targets:
+							if re.match('\d', data) and not re.search('\)$', data) and not re.search('\%$', data):
+								if data:
+									num=data
+									loge.info(f"""data: {data}""")
+									data_list.append(float(num))
+			else:
+				return num
+
 			return data_list
 		except:
-			self.set_errors({"targest_type":targest_type})
+			self.set_errors({"targest_type_word":targest_type_word})
 
 	def _search_word_in_lines(self, list_text, search_word:str = 'Exchange'):
 		for i,line in enumerate(list_text):

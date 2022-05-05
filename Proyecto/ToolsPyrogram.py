@@ -141,9 +141,11 @@ class ToolsPyrogram:
 		**info
 		})
 
-	def get_history(self,client:Client, channel_id,limit=None, data_base="DB_test"):
+	def get_history(self,client:Client, channel_id,limit=None, data_base="DB_test",reverse=False):
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
+				
+				reverse: is es True retorna desde el más viejo al más nuevo. Default to False
 				
 				client: la variable cliente creada para pyrogram.
 				
@@ -157,7 +159,7 @@ class ToolsPyrogram:
 		with client:
 			try:
 				message:Message
-				for message in client.iter_history(channel_id):
+				for message in client.iter_history(channel_id, reverse=reverse):
 					loge.debug(f"El menssage es: {message.message_id}")
 						
 					if (message.text or message.caption) and message.chat and message.chat.type == "channel":
@@ -168,12 +170,13 @@ class ToolsPyrogram:
 							if  value and self.__inspectM.get_data_inspector():
 								data = self.__inspectM.get_data()						
 
-								id= Mongodb().Insert_data("signals",data).inserted_id
+								id= Mongodb().Insert_data("signals",data).inserted_id # obtiene el id with mongo
 								Mongodb().update_by_id("signals",id,"timeStamp_Tg",message["date"]) #  Nota: La fecha del mensaje en el objeto tipo Message esta en la zona horraria adecuada, pero al sacar el atributo aparece en UTC=+00
 								Mongodb().update_by_id("signals",id,"date",dt.fromtimestamp(message["date"])) # con datetime.fromtimestamp la fecha es extraida en el timezone correcto
 								Mongodb().update_by_id("signals",id,"message_id",message["message_id"])
 								Mongodb().update_by_id("signals",id,"channel",message.chat.title)
 								Mongodb().update_by_id("signals",id,"channel_id",message.chat.id)
+								Mongodb().update_by_id("signals",id,"message_link",message.link)
 								n+=1
 							loge.info(f"n:{n}")
 							if n==limit:
@@ -190,11 +193,12 @@ class ToolsPyrogram:
 			except Exception as e:
 					loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
 			
-	def get_message_from_history(self,client:Client, channel_id=None, message_id=None)-> Message:
+	def get_message_from_history(self,client:Client, channel_id=None, message_id=None,reverse=False)-> Message:
 		"""Retorna el mensaje indicado por el id y el canal.
 
 		Args:
 			client (Client): Cliente para conectar con la API
+			reverse (Bool): si es True busca desde los mas viejos hasta los mas nuevos. Defaults to False.
 			channel_id (int, optional): id del canal donde se encuentra el mensaje. Defaults to None.
 			message_id (int, optional): id del mensaje buscado. Defaults to None.
 		"""
@@ -202,7 +206,7 @@ class ToolsPyrogram:
 		with client:
 			try:
 				message:Message
-				for message in client.iter_history(channel_id):
+				for message in client.iter_history(channel_id,reverse=reverse):
 					if message.message_id == message_id:
 						print(f"El message.date.real: {message.date.real}")
 						print(f"El message.date: {message.date}")

@@ -2,7 +2,7 @@ from dataclasses import replace
 import os, sys, re, numpy as np
 from environs import Env
 from pyrogram.types.messages_and_media.message import Message
-
+from logging_base import loge
 env = Env()
 env.read_env()
 
@@ -14,7 +14,7 @@ class Inspector:
 	_icons = "⚡️⚡️"
 	_entry_targets_word = "Entry Targets"
 	_take_profit_targets_word = "Take-Profit Targets"
-	_stop_targets_word = "Stop Targets"
+	_stop_targets_word = "Stop"
 	_symbol = ""
 	_symbol_message = ""
 	_currencies = {}
