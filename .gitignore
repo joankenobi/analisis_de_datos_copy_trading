@@ -11,5 +11,6 @@ capa_datos.*
 Prueba/*
 */Prueba
 *.pickle
+*.csv
 ../*.pickle
 ATOMBTC-5m-data.pickle

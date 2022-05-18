@@ -193,7 +193,7 @@ class ToolsPyrogram:
 			except Exception as e:
 					loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
 			
-	def get_message_from_history(self,client:Client, channel_id=None, message_id=None,reverse=False)-> Message:
+	def get_message_from_history(self,client:Client, channel_id=None, message_id=None,reverse=False, message_all=False)-> Message:
 		"""Retorna el mensaje indicado por el id y el canal.
 
 		Args:
@@ -201,6 +201,7 @@ class ToolsPyrogram:
 			reverse (Bool): si es True busca desde los mas viejos hasta los mas nuevos. Defaults to False.
 			channel_id (int, optional): id del canal donde se encuentra el mensaje. Defaults to None.
 			message_id (int, optional): id del mensaje buscado. Defaults to None.
+			message_all (Bool): "True" si se quiere de retorno todo el objeto message. Default to False.
 		"""
 		
 		with client:
@@ -218,6 +219,7 @@ class ToolsPyrogram:
 							if '"date"' in line:
 								fecha=line.replace('"','').replace('date','').strip()
 								print(f"""El message.date. my zone: {fecha}""")
-			
+						if message_all==True:
+							print(message)
 			except Exception as e:
 				loge.error(f"Algo pasa con el id:{channel_id} error: {e}")
