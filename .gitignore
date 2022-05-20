@@ -12,5 +12,6 @@ Prueba/*
 */Prueba
 *.pickle
 *.csv
+*.loge
 ../*.pickle
 ATOMBTC-5m-data.pickle
