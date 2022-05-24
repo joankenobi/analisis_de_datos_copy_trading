@@ -21,14 +21,14 @@ class ToolsProphet:
     def __init__(self) -> None:
         pass
 
-    def to_days_data(df:pd.DataFrame,column_time:str,column_value:str):
+    def to_days_data(df:pd.DataFrame,column_time:str,column_value:str) -> pd.DataFrame:
       df_temp=df.copy()
       df_temp[column_time]=pd.to_datetime(df_temp[column_time])
       data_by_day=df_temp.groupby(df_temp[column_time].dt.date).agg({column_value:['min', 'max', 'first', 'last']})
       data_by_day=data_by_day[column_value]
       return data_by_day
 
-    def to_data_for_prophet(df:pd.DataFrame,column_value:str):
+    def to_data_for_prophet(df:pd.DataFrame,column_value:str)-> pd.DataFrame:
       df_temp=df.copy()
       df_for_prophet=pd.DataFrame()
       df_for_prophet["y"]=pd.to_numeric(df_temp[column_value],errors="coerce")
@@ -36,7 +36,7 @@ class ToolsProphet:
       df_for_prophet["ds"]=pd.to_datetime(df_for_prophet["ds"],errors="coerce")
       return df_for_prophet
 
-    def train_and_test(df:pd.DataFrame, days_test:int):
+    def train_and_test(df:pd.DataFrame, days_test:int) -> tuple:
       df_train=df[:len(df) - days_test]
       df_test=df[len(df) - days_test:]
 
@@ -87,14 +87,13 @@ class ToolsProphet:
       ax.set_xlabel("date")
       ax.set_ylabel("USD")
       ax.legend(list_legends)
-      #ax.set_ylim([9000, 14105])
       if x_range_show:
         ax.set_xlim(x_range_show)
       if saved_name!= None:
         plt.savefig(saved_name)
       plt.show()
 
-    def get_best_hyperparameters(df_train:pd.DataFrame,initial_days:int=1000, period:int=365, horizon:int=20, param_grid:dict=None):
+    def get_best_hyperparameters(df_train:pd.DataFrame,initial_days:int=1000, period:int=365, horizon:int=20, param_grid:dict=None)-> dict:
       if param_grid==None:
           param_grid = {
             #"growth":['linear','logistic'],
@@ -146,7 +145,7 @@ class ToolsProphet:
       print(f"best params: {best_params}, maes: {maes[np.argmin(maes)]}, mapes: {mapes[np.argmin(maes)]}, rmses: {rmses[np.argmin(maes)]}, ind: {np.argmin(maes)}")
       return best_params
 
-    def get_lowerupper_day(forecast_future:pd.DataFrame):
+    def get_lowerupper_day(forecast_future:pd.DataFrame)-> dict:
     
       days_value=forecast_future.groupby("name_day").agg({"weekly_lower":["mean"]})
       days_value=days_value["weekly_lower"].sort_values("mean")["mean"].to_dict()
@@ -163,14 +162,7 @@ if __name__== "__main__":
     #best_params={'changepoint_prior_scale': 0.1, 'seasonality_prior_scale': 10, 'seasonality_mode': 'multiplicative'}
     best_params={'changepoint_prior_scale': 2.5, 'seasonality_prior_scale': 0.005, 'seasonality_mode': 'multiplicative'}
     forecast_future, forecast_trend=ToolsProphet.apply_prophet(df_train=df_train, days_future=20, best_params=best_params)
-    ToolsProphet.plot_prediction(df_train=df_train, df_test=df_test,forecast_future=forecast_future, saved_name="grafica",x_range_show=[date(2021,1,1),date(2022,5,15)])
-    #print(df.info())
-    #print(df_train.info())
-
-
-    #print(best_params)
     print(forecast_trend)
-    #print(forecast_future)
-    #plt.plot(df_train['ds'], df_train["y"], marker='x' )
-    #plt.savefig("grafica")
-    #df_train.plot(x="ds",y="y", style="b-", grid=True)
+    ToolsProphet.plot_prediction(df_train=df_train, df_test=df_test,forecast_future=forecast_future, saved_name="grafica",x_range_show=[date(2021,1,1),date(2022,5,15)])
+    day_value=ToolsProphet.get_lowerupper_day(forecast_future)
+    print(day_value)
