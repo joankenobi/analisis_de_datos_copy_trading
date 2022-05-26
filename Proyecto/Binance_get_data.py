@@ -135,4 +135,4 @@ def get_all_binance(symbol:str, kline_size:str, save = False):
     return data_df
 
 if __name__ == "__main__":
-    get_all_binance("BTCUSDT","5m",True)
+    get_all_binance("ATOMBTC","5m",True)
