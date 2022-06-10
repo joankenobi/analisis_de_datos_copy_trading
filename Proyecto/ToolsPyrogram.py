@@ -145,7 +145,7 @@ class ToolsPyrogram:
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
 				
-				reverse: is es True retorna desde el más viejo al más nuevo. Default to False
+				reverse: es True retorna desde el más viejo al más nuevo. Default to False
 				
 				client: la variable cliente creada para pyrogram.
 				

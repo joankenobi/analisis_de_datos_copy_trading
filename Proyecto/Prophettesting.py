@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 from ToolsProphet import *
 
-
+from Binance_get_data import get_all_binance
 
 from datetime import date, datetime, timedelta
 from logging_base import loge
@@ -26,17 +26,21 @@ class Prophettesting:
         date=df_sygnal_data.loc[i,"date"]
         return date
 
-    def get_sygnals_data():
+    def get_sygnals_data(self,df_sygnal_data: pd.DataFrame,i):
         # Debe revisar cual es la moneda
+        symbol=df_sygnal_data.iloc[i,"symbol"]
         # Ver si hay data de la misma
         # Si no hay, debe descargarla
-        # Esta data es la que hará de df_train
-        pass
+        df_symbol=get_all_binance(symbol=symbol,kline_size="5m",save=True)
+        # Esta data es la que hará de df_symbol
+        return df_symbol
 
-    def slice_data():
+    def slice_time_for_period(df_symbol:pd.DataFrame, column_time:str,end_date:str,period:str="1Y"):
         # debe picar la symbol_data dentro del date_range
         # Esta es definitivamente el df_train 
-        pass
+        df_symbol[column_time]=pd.to_datetime(df_symbol[column_time])
+        df_train=df_symbol[df_symbol[column_time]<=end_date].last(period)
+        return df_train
 
     def get_public_day_status():
         # Revisa el dia de la publicacion
