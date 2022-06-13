@@ -1,3 +1,5 @@
+
+#%%
 import itertools # para el manejo de varias configuraciones, Mas obciones para iteradores.
 import numpy as np
 import pandas as pd
@@ -6,6 +8,7 @@ from prophet import Prophet
 from prophet.diagnostics import cross_validation, performance_metrics
 #from matplotlib import pyplot as plt
 from datetime import date
+#%%
 #
 #import matplotlib
 #from plotly import offline as py # otro graficador
@@ -21,14 +24,19 @@ class ToolsProphet:
     def __init__(self) -> None:
         pass
 
-    def to_days_data(df:pd.DataFrame,column_time:str,column_value:str) -> pd.DataFrame:
+    def to_days_data(self,df:pd.DataFrame,column_time:str,column_value:str="close") -> pd.DataFrame:
+
       df_temp=df.copy()
       df_temp[column_time]=pd.to_datetime(df_temp[column_time])
       data_by_day=df_temp.groupby(df_temp[column_time].dt.date).agg({column_value:['min', 'max', 'first', 'last']})
       data_by_day=data_by_day[column_value]
+
+      data_by_day.reset_index(inplace=True) # combierte el index en columna
+      data_by_day[column_time]=pd.to_datetime(data_by_day[column_time]) # combierte la columna en datatime
+      data_by_day.set_index(column_time,drop=False,inplace=True) # combierte la columna en index y mantiene la columna 
       return data_by_day
 
-    def to_data_for_prophet(df:pd.DataFrame,column_value:str)-> pd.DataFrame:
+    def to_data_for_prophet(self,df:pd.DataFrame,column_value:str)-> pd.DataFrame:
       df_temp=df.copy()
       df_for_prophet=pd.DataFrame()
       df_for_prophet["y"]=pd.to_numeric(df_temp[column_value],errors="coerce")
@@ -36,7 +44,7 @@ class ToolsProphet:
       df_for_prophet["ds"]=pd.to_datetime(df_for_prophet["ds"],errors="coerce")
       return df_for_prophet
 
-    def train_and_test(df:pd.DataFrame, days_test:int) -> tuple:
+    def train_and_test(self,df:pd.DataFrame, days_test:int) -> tuple:
       df_train=df[:len(df) - days_test]
       df_test=df[len(df) - days_test:]
 
@@ -45,7 +53,7 @@ class ToolsProphet:
       print(f'df_test time range: {df_test["ds"].min()} - {df_test["ds"].max()}')
       return df_train, df_test
 
-    def apply_prophet(df_train, days_future, best_params:dict=None):
+    def apply_prophet(self,df_train, days_future, best_params:dict=None):
     
       m=Prophet()
       if best_params:
@@ -63,7 +71,7 @@ class ToolsProphet:
         forescast_trend="short"
       return forecast_future, forescast_trend
 
-    def plot_prediction(forecast_future:pd.DataFrame, df_train:pd.DataFrame, df_test:pd.DataFrame=[], x_range_show:list=None, figsize:list=None,saved_name:str=None):
+    def plot_prediction(self,forecast_future:pd.DataFrame, df_train:pd.DataFrame, df_test:pd.DataFrame=[], x_range_show:list=None, figsize:list=None,saved_name:str=None):
       # Plot the predictions
       plt.rcParams.update({'font.size': 14, 'figure.figsize': [18, 10]})
       list_legends=['y', 'trend','Yhat',"Yhat_lower","yhat_upper"]
@@ -93,7 +101,7 @@ class ToolsProphet:
         plt.savefig(saved_name)
       plt.show()
 
-    def get_best_hyperparameters(df_train:pd.DataFrame,initial_days:int=1000, period:int=365, horizon:int=20, param_grid:dict=None)-> dict:
+    def get_best_hyperparameters(self,df_train:pd.DataFrame,initial_days:int=1000, period:int=365, horizon:int=20, param_grid:dict=None)-> dict:
       if param_grid==None:
           param_grid = {
             #"growth":['linear','logistic'],
@@ -145,17 +153,21 @@ class ToolsProphet:
       print(f"best params: {best_params}, maes: {maes[np.argmin(maes)]}, mapes: {mapes[np.argmin(maes)]}, rmses: {rmses[np.argmin(maes)]}, ind: {np.argmin(maes)}")
       return best_params
 
-    def get_lowerupper_day(forecast_future:pd.DataFrame)-> dict:
+    def get_lowerupper_day(self,forecast_future:pd.DataFrame)-> dict:
     
       days_value=forecast_future.groupby("name_day").agg({"weekly_lower":["mean"]})
       days_value=days_value["weekly_lower"].sort_values("mean")["mean"].to_dict()
       return days_value
 
+#%%
 if __name__== "__main__":
 
-    df=pd.read_pickle("ETHUSDT-5m-data.pickle")
+
+    df=pd.read_pickle("../BCHUSDT-5m-data.pickle")
     df=ToolsProphet.to_days_data(df=df, column_time="date_myUTC", column_value="close")
-    
+    df.sample(5)
+#%%
+ 
     df=ToolsProphet.to_data_for_prophet(df=df, column_value="last")
     df_train, df_test= ToolsProphet.train_and_test(df=df, days_test= 20)
     #best_params=ToolsProphet.get_best_hyperparameters(df_train=df_train,initial_days=1000,period=100,horizon=20)

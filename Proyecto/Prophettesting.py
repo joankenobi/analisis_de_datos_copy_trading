@@ -3,6 +3,7 @@
 # - Indicar la tendencia dada segun prophet usando el pasado hasta la fecha de publicación.
 # - 
 
+from calendar import day_name, week
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -12,66 +13,169 @@ from ToolsProphet import *
 
 from Binance_get_data import get_all_binance
 
+from Backtesting import Backtecting
+
+
 from datetime import date, datetime, timedelta
 from logging_base import loge
 from mongo_db_crud import Mongodb
 
 class Prophettesting:
+    """Procesa la obtención de todos los datos relacionados con FB_prophet, como lo son la tendencia del forecast y las tendencias del día.
+
+    Ademas guarda los parametros usados para el forecast.
+    """
 
     def __init__(self) -> None:
         pass
 
-    def get_date_range(self,df_sygnal_data: pd.DataFrame,i):
+    def get_date_range(self,df_sygnal_data: pd.DataFrame,i: int)-> datetime:
+        """Retorna la fecha de publicacion de la señal
+
+        Args:
+            df_sygnal_data (pd.DataFrame): data frame que contiene todas las señales a procesar.
+            i (_type_): indice de la señal evaluada.
+
+        Returns:
+            _type_: pandas.DataFrame
+
+        """
         # Debe obtener las fechas para el df_train
         date=df_sygnal_data.loc[i,"date"]
         return date
 
-    def get_sygnals_data(self,df_sygnal_data: pd.DataFrame,i):
+    
+    def get_symbol_data(self,df_sygnal_data: pd.DataFrame,i: int)-> pd.DataFrame:
+        """Retorna los datos historicos del simbolo a evaluar, si no los consigue, los pide a Binance por medio de la Api.
+
+        Args:
+            df_sygnal_data (pd.DataFrame): data frame que contiene todas las señales a procesar.
+            i (int): indice de la señal evaluada.
+
+        Returns:
+            _type_: pandas.DataFrame
+
+        """
+
         # Debe revisar cual es la moneda
-        symbol=df_sygnal_data.iloc[i,"symbol"]
+        loge.info(f"""i= {i} """)    
+        symbol=df_sygnal_data.loc[i,"symbol"]
+        loge.info(f"""symbol= {symbol} """)    
         # Ver si hay data de la misma
         # Si no hay, debe descargarla
         df_symbol=get_all_binance(symbol=symbol,kline_size="5m",save=True)
         # Esta data es la que hará de df_symbol
         return df_symbol
 
-    def slice_time_for_period(df_symbol:pd.DataFrame, column_time:str,end_date:str,period:str="1Y"):
+    def to_day_and_slice_time_for_period(self,df_symbol:pd.DataFrame, column_time:str,end_date:str,period:str="1Y",column_value="close")-> pd.DataFrame:
+        """Pasa los datos historicos del simbolo a un periodo de tiempo de dias y aplica un corte desde la fecha dada hasta un periodo atars de esa fecha.
+        Args:
+            df_symbol (pd.DataFrame): data frame que contiene todo el dato historico del simbolo.
+            i (int): indice de la señal evaluada.
+            column_time (str): columna que contiene los datos de tiempo en el df.
+            end_date (str): fecha final para realizar el corte.
+            period (str): rango de tiempo para cortar antes de end_date. Si se coloca "1Y" el df solo mostrará desde end_dat hasta una año atrás. Default: "1Y"
+            column_value (str): columna que contiene el valor principal para agrupar en periodo de 1 día. Default: "close"
+
+        Returns:
+            _type_: pandas.DataFrame
+
+        """
+ 
         # debe picar la symbol_data dentro del date_range
         # Esta es definitivamente el df_train 
-        df_symbol[column_time]=pd.to_datetime(df_symbol[column_time])
+        #df_symbol[column_time]=pd.to_datetime(df_symbol[column_time])
+        # pass to a day period
+        prophet=ToolsProphet()
+        df_symbol=prophet.to_days_data(df=df_symbol,column_time=column_time, column_value=column_value)
+        loge.info(f"""df_symbol.sample(5)= {df_symbol.sample(5)} """)    
+
         df_train=df_symbol[df_symbol[column_time]<=end_date].last(period)
         return df_train
 
-    def get_public_day_status():
+    def get_public_day_status(self,df_sygnal_data:pd.DataFrame,i:int, day_value: dict)-> str:
         # Revisa el dia de la publicacion
+        day_name=df_sygnal_data.loc[i,"date"].day_name()
         # Lo compara con el los day_value
+        
+        # capturar la fecha del dia siguiente de la publicacion
+        next_day_name=df_sygnal_data.loc[i,"date"]+timedelta(days=1)
+        # convertirlo en day_name
+        next_day_name=next_day_name.day_name()
+        # convertirlo en day_status
+        next_day_status=day_value[next_day_name]
+        day_status=day_value[day_name]
+        # evaluar si day1 > day2 y determinar la tendencia.
+        if next_day_status > day_status:
+            trend="long"
+        elif next_day_status < day_status:
+            trend="short"
+        else:
+            trend="NEUTRAL"
+        return trend
         # Lo guarda como estado del dia.
-        pass
 
-    def get_forecast_20_trend():
+
+    def get_forecast_20_trend(self,df__sygnal_data:pd.DataFrame,i: int, df_train:pd.DataFrame):
+        prophet=ToolsProphet()
+        # pasar los datos a un formato prophet
+        df_train=prophet.to_data_for_prophet(df=df__sygnal_data,column_value="last")
+        # obtener los mejores hiperparametros
+        best_params=prophet.get_best_hyperparameters(df_train=df_train,initial_days=50,period=365,horizon=20)
         # Obtiene la tendencia de los proximos 20 dias segun prophet
+        forecast_future, forecast_trend=prophet.apply_prophet(df_train=df_train, days_future=20, best_params=best_params)
         # Guardar esa info junto al sygnal_data
-        pass
+        return best_params,forecast_future,forecast_trend
 
     def apply_prophettesting(self,df_sygnal_data:pd.DataFrame,data_base="DB_test"):
 
+        #i=0
+        #if i==0:
         for i in range(len(df_sygnal_data)):
 
         ### Get date range 
+            loge.info(f"""---Get date range """)    
+
             date=self.get_date_range(df_sygnal_data,i)
             loge.info(f"""date= {date} """)    
-            loge.info(f"""date_type= {type(date)} """)    
         
         ### Get symbol data
+            loge.info(f"""---Get symbol data """)    
 
-            loge.info(
-                f"""get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}""")
+            df_symbol=self.get_symbol_data(df_sygnal_data,i)
+            loge.info(f"""df_symbol= {df_symbol.columns} """)    
 
-            #df_symbol_data = self.get_data_about_symbol(
-            #    df_sygnal_data.loc[i, "symbol"])
-#
-            #is_long=df_sygnal_data.iloc[i]["is_long"]
+        ### slice data
+            loge.info(f"""---slice data """)    
 
+            df_train=self.to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date)
+            loge.info(f"""df_train= {df_train.shape} """)    
+
+        ### apply prophet
+            loge.info(f"""---apply prophet """)    
+
+            best_params,forecast_future,forecast_trend=self.get_forecast_20_trend(df__sygnal_data=df_train,i=i,df_train=df_train)
+            loge.info(f"""forecast_future= {forecast_future.shape} """)    
+            loge.info(f"""forecast_trend= {forecast_trend} """)    
+
+        ### get value_day
+            loge.info(f"""---get value_day """)    
+            day_value=ToolsProphet().get_lowerupper_day(forecast_future)
+            loge.info(f"""day_value= {day_value.items()} """)    
+        
+        ### compare value_day
+            loge.info(f"""---compare value_day """)    
+            trend_day=self.get_public_day_status(df_sygnal_data=df_sygnal_data,i=i,day_value=day_value)
+            loge.info(f"""{day_name} = {trend_day} """)
+  
+            
+        ### Update db
+            _id=df_sygnal_data.loc[i,"_id"]    
+            Backtecting().update_backtesting(_id,"forecast_trend",forecast_trend)
+            Backtecting().update_backtesting(_id,"day_value",day_value)
+            Backtecting().update_backtesting(_id,"trend_day",trend_day)
+            Backtecting().update_backtesting(_id,"best_params",best_params)
+            Backtecting().update_backtesting(_id,"best_params",best_params)
         print("all line prophetteting.....")
 
 if __name__ == "__main__":

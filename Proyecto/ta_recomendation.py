@@ -152,3 +152,14 @@ class Compute:
             pop=occ.popitem()
             d[pop[0]]=pop[1]
         return d
+
+    def apply_ta_recomendation(self):
+        # capturar la señal
+        # optener la fecha de publicación
+        # capturar el simbolo
+        # tener el historial del simbolo
+        # slice el hitorial 1y atars de la publicacion
+        # pasar los datos a formato de días
+        # calcular las recomendaciones
+        # guardar en db
+        pass
