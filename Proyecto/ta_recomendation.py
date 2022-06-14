@@ -1,5 +1,12 @@
 from ta_calculator import *
 import numpy as np
+from mongo_db_crud import Mongodb
+from logging_base import loge
+from Backtesting import Backtecting
+
+
+from Prophettesting import Prophettesting
+
 
 class Recommendation:
     buy = "long"
@@ -153,13 +160,44 @@ class Compute:
             d[pop[0]]=pop[1]
         return d
 
-    def apply_ta_recomendation(self):
-        # capturar la señal
-        # optener la fecha de publicación
-        # capturar el simbolo
-        # tener el historial del simbolo
-        # slice el hitorial 1y atars de la publicacion
-        # pasar los datos a formato de días
-        # calcular las recomendaciones
-        # guardar en db
-        pass
+def apply_ta_recomendation(df_sygnal_data):
+    # capturar la señal
+    i=0
+    if i==0:
+    #for i in range(len(df_sygnal_data)):
+    # optener la fecha de publicación
+    ### Get date range 
+        loge.info(f"""---Get date range """)    
+        date=Prophettesting().get_date_range(df_sygnal_data,i)
+        loge.info(f"""date= {date} """)    
+    # capturar el simbolo
+    # tener el historial del simbolo
+    ### Get symbol data
+        loge.info(f"""---Get symbol data """)    
+
+        df_symbol=Prophettesting().get_symbol_data(df_sygnal_data,i)
+        loge.info(f"""df_symbol= {df_symbol.columns} """)    
+    # slice el hitorial 1y atars de la publicacion
+    # pasar los datos a formato de días
+    ### slice data
+        loge.info(f"""---slice data """)    
+
+        df_train=Prophettesting().to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date,)
+        loge.info(f"""df_train= {df_train.shape} """)    
+    # calcular las recomendaciones
+        ta_recomendation=Compute(df_train).all_occillators()
+    # guardar en db            
+    ### Update db
+        _id=df_sygnal_data.loc[i,"_id"]    
+        Backtecting().update_backtesting(_id,"ta_recomendation",ta_recomendation)
+    print("all line Compute ta_recomendation.....")
+
+if __name__ == "__main__":
+
+    host = "mongodb://localhost:27017/"
+    db_name = "back_prueba"
+    db = Mongodb(host).set_db(db_name)
+    data = db.signals.find()
+    list_data = list(data)
+    df_sygnal_data = pd.DataFrame(list_data)
+    apply_ta_recomendation(df_sygnal_data=df_sygnal_data,)

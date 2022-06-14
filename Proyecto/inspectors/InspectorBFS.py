@@ -2,7 +2,7 @@ import os, sys
 import re
 
 from pyrogram.types.messages_and_media.message import Message
-from TraderBinanceF import TraderBinanceF
+#from TraderBinanceF import TraderBinanceF
 
 
 class InspectorBFS:
