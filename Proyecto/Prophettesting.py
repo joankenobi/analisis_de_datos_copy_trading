@@ -127,56 +127,66 @@ class Prophettesting:
         # Guardar esa info junto al sygnal_data
         return best_params,forecast_future,forecast_trend
 
-    def apply_prophettesting(self,df_sygnal_data:pd.DataFrame,data_base="DB_test"):
+    def apply_prophettesting(self,df_sygnal_data:pd.DataFrame,data_base="DB_test",pass_sygnal=False):
 
         #i=0
         #if i==0:
         for i in range(len(df_sygnal_data)):
+            # if (df_sygnal_data.loc[i,"error_prophettesting"].empty or df_sygnal_data.loc[i,"best_params"].empty) and pass_sygnal:
+            # if (df_sygnal_data.loc[i] or df_sygnal_data.loc[i,"best_params"].empty) and pass_sygnal:
+                
+            #     loge.info(f"""se salto la señal nro {i}""")    
+            #     pass
+            try:
 
-        ### Get date range 
-            loge.info(f"""---Get date range """)    
+            ### Get date range 
+                loge.info(f"""---Get date range """)    
 
-            date=self.get_date_range(df_sygnal_data,i)
-            loge.info(f"""date= {date} """)    
-        
-        ### Get symbol data
-            loge.info(f"""---Get symbol data """)    
-
-            df_symbol=self.get_symbol_data(df_sygnal_data,i)
-            loge.info(f"""df_symbol= {df_symbol.columns} """)    
-
-        ### slice data
-            loge.info(f"""---slice data """)    
-
-            df_train=self.to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date)
-            loge.info(f"""df_train= {df_train.shape} """)    
-
-        ### apply prophet
-            loge.info(f"""---apply prophet """)    
-
-            best_params,forecast_future,forecast_trend=self.get_forecast_20_trend(df__sygnal_data=df_train,i=i,df_train=df_train)
-            loge.info(f"""forecast_future= {forecast_future.shape} """)    
-            loge.info(f"""forecast_trend= {forecast_trend} """)    
-
-        ### get value_day
-            loge.info(f"""---get value_day """)    
-            day_value=ToolsProphet().get_lowerupper_day(forecast_future)
-            loge.info(f"""day_value= {day_value.items()} """)    
-        
-        ### compare value_day
-            loge.info(f"""---compare value_day """)    
-            trend_day=self.get_public_day_status(df_sygnal_data=df_sygnal_data,i=i,day_value=day_value)
-            loge.info(f"""{day_name} = {trend_day} """)
-  
+                date=self.get_date_range(df_sygnal_data,i)
+                loge.info(f"""date= {date} """)    
             
-        ### Update db
-            _id=df_sygnal_data.loc[i,"_id"]    
-            Backtecting().update_backtesting(_id,"forecast_trend",forecast_trend)
-            Backtecting().update_backtesting(_id,"day_value",day_value)
-            Backtecting().update_backtesting(_id,"trend_day",trend_day)
-            Backtecting().update_backtesting(_id,"best_params",best_params)
-            Backtecting().update_backtesting(_id,"best_params",best_params)
-        print("all line prophetteting.....")
+            ### Get symbol data
+                loge.info(f"""---Get symbol data """)    
+
+                df_symbol=self.get_symbol_data(df_sygnal_data,i)
+                loge.info(f"""df_symbol= {df_symbol.columns} """)    
+
+            ### slice data
+                loge.info(f"""---slice data """)    
+
+                df_train=self.to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date)
+                loge.info(f"""df_train= {df_train.shape} """)    
+
+            ### apply prophet
+                loge.info(f"""---apply prophet """)    
+
+                best_params,forecast_future,forecast_trend=self.get_forecast_20_trend(df__sygnal_data=df_train,i=i,df_train=df_train)
+                loge.info(f"""forecast_future= {forecast_future.shape} """)    
+                loge.info(f"""forecast_trend= {forecast_trend} """)    
+
+            ### get value_day
+                loge.info(f"""---get value_day """)    
+                day_value=ToolsProphet().get_lowerupper_day(forecast_future)
+                loge.info(f"""day_value= {day_value.items()} """)    
+            
+            ### compare value_day
+                loge.info(f"""---compare value_day """)    
+                trend_day=self.get_public_day_status(df_sygnal_data=df_sygnal_data,i=i,day_value=day_value)
+                loge.info(f"""{day_name} = {trend_day} """)
+    
+                
+            ### Update db
+                _id=df_sygnal_data.loc[i,"_id"]    
+                Backtecting().update_backtesting(_id,"forecast_trend",forecast_trend)
+                Backtecting().update_backtesting(_id,"day_value",day_value)
+                Backtecting().update_backtesting(_id,"trend_day",trend_day)
+                Backtecting().update_backtesting(_id,"best_params",best_params)
+                print("all line prophetteting.....")
+        
+            except Exception as e:
+                error_prophettesting=e
+                Backtecting().update_backtesting(_id,"error_prophettesting",error_prophettesting)
+                pass
 
 if __name__ == "__main__":
 
@@ -186,4 +196,4 @@ if __name__ == "__main__":
     data = db.signals.find()
     list_data = list(data)
     df_sygnal_data = pd.DataFrame(list_data)
-    Prophettesting().apply_prophettesting(df_sygnal_data, db_name)
+    Prophettesting().apply_prophettesting(df_sygnal_data, db_name,pass_sygnal=True)

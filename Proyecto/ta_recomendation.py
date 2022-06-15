@@ -20,7 +20,7 @@ class Compute:
     _df_symbol=None
 
     def __init__(self,df_symbol:pd.DataFrame):
-        self._df_symbol=ta_all_occillators(df_symbol)
+        self._df_symbol=ta_all_occillators(df_symbol)    
 
     def RSI(self)-> dict:
         """Compute Relative Strength Index
@@ -160,6 +160,11 @@ class Compute:
             d[pop[0]]=pop[1]
         return d
 
+def float_ohlcv(df_symbol):
+    df_temp=df_symbol.copy()
+    df_temp[["open","high","low","close"]]=df_temp[["open","high","low","close"]].astype(float)
+    return df_temp
+
 def apply_ta_recomendation(df_sygnal_data):
     # capturar la señal
     i=0
@@ -183,6 +188,8 @@ def apply_ta_recomendation(df_sygnal_data):
         loge.info(f"""---slice data """)    
 
         df_train=Prophettesting().to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date,)
+        df_train.rename(columns={"last":"close","max":"high","min":"low","first":"open"},inplace=True)
+        df_train=float_ohlcv(df_train)
         loge.info(f"""df_train= {df_train.shape} """)    
     # calcular las recomendaciones
         ta_recomendation=Compute(df_train).all_occillators()

@@ -46,7 +46,7 @@ class Backtecting:
 
             if df_symbol_data[df_symbol_data["date_myUTC"].apply(lambda x : x.year)==date_start.year].empty:
 
-                # Busca los datosque pertenezcan a la fecha inicial para evitar un slice falso.
+                # Busca los datos que pertenezcan a la fecha inicial para evitar un slice falso.
             
                 loge.error("El df temp esta vacio por que los datos de la fecha no existe")
                 raise Exception 
