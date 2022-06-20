@@ -9,7 +9,7 @@ loge.basicConfig(level=loge.INFO, #nivel de trabajo
     format="%(asctime)s:, %(levelname)s, [%(filename)s:%(lineno)s], %(message)s", #info soble el mensaje.
     datefmt="%D %I:%M:%S %P", #d-m-y h:m:s pm
     handlers=[
-        loge.FileHandler("capa_datos.loge"), #info en doc.loge
+        loge.FileHandler("log_pasanti.loge"), #info en doc.loge
         loge.StreamHandler() #info en consola
     ]
 )

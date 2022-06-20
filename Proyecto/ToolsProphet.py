@@ -151,7 +151,13 @@ class ToolsProphet:
       print(tuning_results.sort_values("mae"))
       best_params = all_params[np.argmin(maes)]
       print(f"best params: {best_params}, maes: {maes[np.argmin(maes)]}, mapes: {mapes[np.argmin(maes)]}, rmses: {rmses[np.argmin(maes)]}, ind: {np.argmin(maes)}")
-      return best_params
+      
+      score={}
+      score["mae"]=maes[np.argmin(maes)]
+      score["rmse"]=rmses[np.argmin(rmses)]
+      score["mape"]=mapes[np.argmin(mapes)]
+      
+      return best_params,score
 
     def get_lowerupper_day(self,forecast_future:pd.DataFrame)-> dict:
     

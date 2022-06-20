@@ -3,7 +3,7 @@ from logging_base import loge
 from Binance_get_data import get_all_binance
 import pandas as pd
 from mongo_db_crud import Mongodb
-
+import numpy as np
 
 class Backtecting:
 
@@ -96,11 +96,12 @@ class Backtecting:
 
             # Objetivo: encontrar la vela en la que entró
             #loge.info(f"""df_symbol_data["open"]: {type(df_symbol_data["open"].iloc[0])}""")
+            #loge.info(f"""--- operate: {operate} type:{type(operate)} """)
             try:
                 
                 #loge.info(f"""df_symbol_data["open"]: {type(df_symbol_data["open"].iloc[0])}""")
                 
-                mask = (df_symbol_data["high"] >= operate) & (df_symbol_data["low"] <= operate) # el entry esta dentro de la vela? 
+                mask:pd.Series = (df_symbol_data["high"] >= operate) & (df_symbol_data["low"] <= operate) # el entry esta dentro de la vela? 
                                 
                 date = df_symbol_data[mask].iloc[0]["date_myUTC"] # La primera fila (tiempo mas lejano) que cumple la mask.
 
@@ -110,9 +111,13 @@ class Backtecting:
             except Exception as e:
 
                 loge.error(f""" No se encontro valor entry {operate} error: {e} """)
+                if mask.sum() == 0:
+                    loge.error(f""" Es probable que {operate} no este dentro de las fechas del Slice """)
+
                 dates[str(operate)] = bool(False)
                 pass
-        
+            
+
         return dates
 
 
@@ -193,6 +198,7 @@ class Backtecting:
                 loge.info(f"""stop loss OHLC is_long: {is_long}""")
                 #loge.info(f"""df_symbol_data["open"]: {type(df_symbol_data["open"].iloc[0])}""")
                 if is_long:
+                    # buscar los valores menores a el valor de stop loss
                     mask = (df_symbol_data["open"] <= operate) | (df_symbol_data["high"] <= operate) | (df_symbol_data["low"] <= operate) | (df_symbol_data["close"] <= operate)
 
                 else:
@@ -221,7 +227,7 @@ class Backtecting:
 
 
 
-    def backtest_operate(self, df_sygnal_data: pd.DataFrame, data_base="DB_test"):
+    def backtest_operate(self, df_sygnal_data: pd.DataFrame, data_base="DB_test",pass_sygnal=False):
         """Ejecuta todo el proceso de backtesting
 
         arg:
@@ -231,91 +237,128 @@ class Backtecting:
         """
 
         for i in range(len(df_sygnal_data)):
+            if ("error_backtesting" in df_sygnal_data.loc[i].dropna(inplace=False).index or "efficiency" in df_sygnal_data.loc[i].dropna(inplace=False).index) and pass_sygnal:
 
-        
-        ### Get symbol data
+                loge.info(f"""se salto la señal ya testeada nro {i}""")  
+                pass
 
-            loge.info(
-                f"""get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}""")
+            else:
+                try:
+                ### Get symbol data
 
-            df_symbol_data = self.get_data_about_symbol(
-                df_sygnal_data.loc[i, "symbol"])
+                    loge.info(
+                        f"""get symbol data nro: {i} {df_sygnal_data.loc[i,"symbol"]}""")
 
-            is_long=df_sygnal_data.iloc[i]["is_long"]
-        
-        
-        #### Get date entry
-            date_start = df_sygnal_data.loc[i, "date"]
+                    df_symbol_data = self.get_data_about_symbol(
+                        df_sygnal_data.loc[i, "symbol"])
 
-            temp_df_symbol = self.slice_df_by_date(
-                df_symbol_data=df_symbol_data, date_start=date_start)
-            entry_targets = df_sygnal_data.iloc[i]["entry_targets"]
+                    is_long=df_sygnal_data.iloc[i]["is_long"]
 
-            loge.info(
-                f"""entry_targets: {entry_targets} Type:  {type(entry_targets)}""")
 
-            dates_entry: dict = self.find_entry_in_OHLC_line(
-                entries_data=entry_targets, df_symbol_data=temp_df_symbol)
-            
-            loge.info(f"dates_entry: {dates_entry}")
-        
-        
-        
-        ### Get date stoploss
-            date_start = list(dates_entry.values())[0]
-            temp_df_symbol = self.slice_df_by_date(
-                df_symbol_data=temp_df_symbol, date_start=date_start)
+                #### Get date entry
+                    date_start = df_sygnal_data.loc[i, "date"]
 
-            stop_targets = df_sygnal_data.iloc[i]["stop_targets"]
+                    temp_df_symbol = self.slice_df_by_date(
+                        df_symbol_data=df_symbol_data, date_start=date_start)
+                    entry_targets = df_sygnal_data.iloc[i]["entry_targets"]
 
-            loge.info(
-                f"""stop_targets: {stop_targets} Type:  {type(stop_targets)}""")
-            
+                    loge.info(
+                        f"""---entry_targets: {entry_targets}""")
 
-            dates_stoploss: dict = self.find_stoploss_in_OHLC_line(
-                stoploss_data=stop_targets, df_symbol_data=temp_df_symbol,is_long=is_long)
-            loge.info(f"dates_stoploss: {dates_stoploss}")
+                    dates_entry: dict = self.find_entry_in_OHLC_line(
+                        entries_data=entry_targets, df_symbol_data=temp_df_symbol)
 
-        
-        
-        ### Get dates_profit
-            dates_end = list(dates_stoploss.values())[0]
-            
-            temp_df_symbol = self.slice_df_by_date(
-                df_symbol_data=temp_df_symbol, date_start=date_start, date_end=dates_end)
-            
-            take_profit_targets = df_sygnal_data.iloc[i]["take_profit_targets"]
-            
-            loge.info(
-                f"""take_profit_targets: {take_profit_targets} Type:  {type(take_profit_targets)}""")
-            
-            dates_profit: dict = self.find_profit_in_OHLC_line(
-                entries_data=take_profit_targets, df_symbol_data=temp_df_symbol,is_long=is_long)
-            
-            loge.info(f"dates_profit: {dates_profit}")
-            
-            
-        #### Get efficiency
-            efficiency={f"""{(len(list(dates_profit.values()))-list(dates_profit.values()).count(False))}/{len(list(dates_profit.values()))} """:(len(list(dates_profit.values()))-list(dates_profit.values()).count(False))/len(list(dates_profit.values()))}
+                    loge.info(f"dates_entry: {dates_entry}")
 
-            
-        ### Update db
-            loge.info(f"""df_sygnal_data.loc[i,"_id"]: {df_sygnal_data.loc[i,"_id"]}""")
-            #loge.info(f"""df_sygnal_data.loc[i,"_id"]["$oid"]: {df_sygnal_data.loc[i,"_id"]["$oid"]}""")
-            _id=df_sygnal_data.loc[i,"_id"]
-            self.update_backtesting(_id,"dates_entry",dates_entry)
-            self.update_backtesting(_id,"dates_stoploss",dates_stoploss)
-            self.update_backtesting(_id,"dates_profit",dates_profit)
-            self.update_backtesting(_id,"efficiency",efficiency)
-        print("all line backteting.....")
 
+
+                ### Get date stoploss
+                    ### quitar las entradas False
+                    date_start = list(set(dates_entry.values()))
+                    if False in date_start:
+                        date_start.remove(False)
+                    #loge.info(f"----Fechas de entradas----- {date_start}---- {type(date_start)}")
+
+                    ### Organizar las fechas para no usar las entradas ultimas como primeras
+                    if date_start!=[]:
+                        date_start.sort()
+                        date_start=date_start[0]
+                    ### La operacion nunca entró
+                    else:
+                        loge.info(f"--La operacion: {i} no entró")
+                        _id=df_sygnal_data.loc[i,"_id"]
+                        self.update_backtesting(_id,"dates_entry", False)
+                        self.update_backtesting(_id,"dates_stoploss",False)
+                        self.update_backtesting(_id,"dates_profit",False)
+                        self.update_backtesting(_id,"efficiency",0)
+                        continue    
+
+
+                    temp_df_symbol = self.slice_df_by_date(
+                        df_symbol_data=temp_df_symbol, date_start=date_start)
+
+                    stop_targets = df_sygnal_data.iloc[i]["stop_targets"]
+
+                    loge.info(
+                        f"""stop_targets: {stop_targets} Type:  {type(stop_targets)}""")
+
+                    dates_stoploss: dict = self.find_stoploss_in_OHLC_line(
+                        stoploss_data=stop_targets, df_symbol_data=temp_df_symbol,is_long=is_long)
+                    loge.info(f"dates_stoploss: {dates_stoploss}")
+
+
+
+                ### Get dates_profit
+                    dates_end = list(dates_stoploss.values())[0]
+
+                    # Si nunca llega a stop loss, colocar la ultima fecha del df
+                    if dates_end == False:
+                        dates_end = temp_df_symbol["date_myUTC"].max()
+
+                    temp_df_symbol = self.slice_df_by_date(
+                        df_symbol_data=temp_df_symbol, date_start=date_start, date_end=dates_end)
+
+                    take_profit_targets = df_sygnal_data.iloc[i]["take_profit_targets"]
+
+                    loge.info(
+                        f"""take_profit_targets: {take_profit_targets} Type:  {type(take_profit_targets)}""")
+
+                    dates_profit: dict = self.find_profit_in_OHLC_line(
+                        entries_data=take_profit_targets, df_symbol_data=temp_df_symbol,is_long=is_long)
+
+                    loge.info(f"dates_profit: {dates_profit}")
+
+
+                #### Get efficiency
+                    efficiency={f"""{(len(list(dates_profit.values()))-list(dates_profit.values()).count(False))}/{len(list(dates_profit.values()))} """:(len(list(dates_profit.values()))-list(dates_profit.values()).count(False))/len(list(dates_profit.values()))}
+
+
+                ### Update db
+                    loge.info(f"""df_sygnal_data.loc[i,"_id"]: {df_sygnal_data.loc[i,"_id"]}""")
+                    #loge.info(f"""df_sygnal_data.loc[i,"_id"]["$oid"]: {df_sygnal_data.loc[i,"_id"]["$oid"]}""")
+                    _id=df_sygnal_data.loc[i,"_id"]
+                    self.update_backtesting(_id,"dates_entry",dates_entry)
+                    self.update_backtesting(_id,"dates_stoploss",dates_stoploss)
+                    self.update_backtesting(_id,"dates_profit",dates_profit)
+                    self.update_backtesting(_id,"efficiency",efficiency)
+                    self.update_backtesting(_id,"error_backtesting",np.nan)
+                except Exception as e:
+                    error_backtesting= datetime.now()
+                    loge.error(f"""---error----signal:{df_sygnal_data.iloc[i].loc['message_link']}, {e}""")
+                    _id=df_sygnal_data.loc[i,"_id"]
+                    Backtecting().update_backtesting(_id,"error_backtesting",error_backtesting)
+                    pass
+
+        print("all line backtested.....")
 
 if __name__ == "__main__":
 
     host = "mongodb://localhost:27017/"
-    db_name = "back_prueba"
+    db_name = "db_pasanti"
     db = Mongodb(host).set_db(db_name)
     data = db.signals.find()
     list_data = list(data)
     df_sygnal_data = pd.DataFrame(list_data)
+    df_sygnal_data = df_sygnal_data.sort_values('symbol')
+    df_sygnal_data = df_sygnal_data.iloc[20:21].reset_index()
     Backtecting().backtest_operate(df_sygnal_data, db_name)

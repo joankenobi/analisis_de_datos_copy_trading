@@ -3,6 +3,7 @@ import numpy as np
 from mongo_db_crud import Mongodb
 from logging_base import loge
 from Backtesting import Backtecting
+from datetime import datetime
 
 
 from Prophettesting import Prophettesting
@@ -13,7 +14,7 @@ class Recommendation:
     strong_buy = "STRONG_BUY"
     sell = "short"
     strong_sell = "STRONG_SELL"
-    neutral = "NEUTRAL"
+    neutral = "neutral"
     error = "ERROR"
 
 class Compute:
@@ -165,39 +166,57 @@ def float_ohlcv(df_symbol):
     df_temp[["open","high","low","close"]]=df_temp[["open","high","low","close"]].astype(float)
     return df_temp
 
-def apply_ta_recomendation(df_sygnal_data):
+def apply_ta_recomendation(df_sygnal_data:pd.DataFrame,pass_sygnal=False):
     # capturar la señal
-    i=0
-    if i==0:
-    #for i in range(len(df_sygnal_data)):
-    # optener la fecha de publicación
-    ### Get date range 
-        loge.info(f"""---Get date range """)    
-        date=Prophettesting().get_date_range(df_sygnal_data,i)
-        loge.info(f"""date= {date} """)    
-    # capturar el simbolo
-    # tener el historial del simbolo
-    ### Get symbol data
-        loge.info(f"""---Get symbol data """)    
+    #i=0
+    #if i==0:
+    for i in range(len(df_sygnal_data)):
+        
+        ### Saltar las señales ya testeadas
+        if (("error_ta_recomendation" in df_sygnal_data.loc[i].dropna(inplace=False).index) or ("ta_recomendation" in df_sygnal_data.loc[i].dropna(inplace=False).index) and pass_sygnal):
 
-        df_symbol=Prophettesting().get_symbol_data(df_sygnal_data,i)
-        loge.info(f"""df_symbol= {df_symbol.columns} """)    
-    # slice el hitorial 1y atars de la publicacion
-    # pasar los datos a formato de días
-    ### slice data
-        loge.info(f"""---slice data """)    
+            loge.info(f"""se salto la señal ya testeada nro {i}""")
+            pass
 
-        df_train=Prophettesting().to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date,)
-        df_train.rename(columns={"last":"close","max":"high","min":"low","first":"open"},inplace=True)
-        df_train=float_ohlcv(df_train)
-        loge.info(f"""df_train= {df_train.shape} """)    
-    # calcular las recomendaciones
-        ta_recomendation=Compute(df_train).all_occillators()
-    # guardar en db            
-    ### Update db
-        _id=df_sygnal_data.loc[i,"_id"]    
-        Backtecting().update_backtesting(_id,"ta_recomendation",ta_recomendation)
-    print("all line Compute ta_recomendation.....")
+        else:
+            try:    
+            # optener la fecha de publicación
+            ### Get date range 
+                loge.info(f"""---Get date range """)    
+                date=Prophettesting().get_date_range(df_sygnal_data,i)
+                loge.info(f"""date= {date} """)    
+            # capturar el simbolo
+            # tener el historial del simbolo
+            ### Get symbol data
+                loge.info(f"""---Get symbol data """)    
+
+                df_symbol=Prophettesting().get_symbol_data(df_sygnal_data,i)
+                loge.info(f"""df_symbol= {df_symbol.columns} """)    
+            # slice el hitorial 1y atars de la publicacion
+            # pasar los datos a formato de días
+            ### slice data
+                loge.info(f"""---slice data """)    
+
+                df_train=Prophettesting().to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date,)
+                df_train.rename(columns={"last":"close","max":"high","min":"low","first":"open"},inplace=True)
+                df_train=float_ohlcv(df_train)
+                loge.info(f"""df_train= {df_train.shape} """)    
+            # calcular las recomendaciones
+                ta_recomendation=Compute(df_train).all_occillators()
+            # guardar en db            
+            ### Update db
+                _id=df_sygnal_data.loc[i,"_id"]    
+                Backtecting().update_backtesting(_id,"ta_recomendation",ta_recomendation)
+                Backtecting().update_backtesting(_id,"error_ta_recomendation",np.nan)
+
+            except Exception as e:
+                    error_ta_recomendation=datetime.now()
+                    loge.error(f"---error----signal:{df_sygnal_data.iloc[i].loc['message_link']}, {e}")
+                    _id=df_sygnal_data.loc[i,"_id"]
+                    Backtecting().update_backtesting(_id,"error_ta_recomendation",error_ta_recomendation)
+                    pass
+
+    print("all line Computed ta_recomendation.....")
 
 if __name__ == "__main__":
 
@@ -207,4 +226,4 @@ if __name__ == "__main__":
     data = db.signals.find()
     list_data = list(data)
     df_sygnal_data = pd.DataFrame(list_data)
-    apply_ta_recomendation(df_sygnal_data=df_sygnal_data,)
+    apply_ta_recomendation(df_sygnal_data=df_sygnal_data)

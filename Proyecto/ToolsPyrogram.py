@@ -141,7 +141,7 @@ class ToolsPyrogram:
 		**info
 		})
 
-	def get_history(self,client:Client, channel_id,limit=None, data_base="DB_test",reverse=False):
+	def get_history(self,client:Client, channel_id,limit=None,host="mongodb://localhost:27017/", data_base="DB_test",reverse=False):
 		"""
 			Retorna todos los mensajes publicados en el canal o el chat.
 				
@@ -150,9 +150,11 @@ class ToolsPyrogram:
 				client: la variable cliente creada para pyrogram.
 				
 				channel_id: es el numero ide del canal, grupo o chat.
+
+				limit: cantidad de datos a guardar.
 		"""
 
-		db=Mongodb("mongodb://localhost:27017/").set_db(data_base)
+		db=Mongodb(host).set_db(data_base)
 		if limit==None:
 			limit=int(input("Ingrese la cantidad de datos a guardar: "))
 		n=0

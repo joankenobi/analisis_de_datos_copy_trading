@@ -2,6 +2,7 @@
 from pyrogram import Client as ClientTg
 from pyrogram.handlers import MessageHandler
 from ToolsPyrogram import ToolsPyrogram
+from All_testing import apply_all_testing
 from environs import Env
 import sys
 from logging_base import loge
@@ -10,6 +11,7 @@ env = Env() #  pide los datos de la .env
 env.read_env()
 PROD = env.bool('PROD',False) #  indica si se esta en modo produccion (normalmente falso)
 HISTORY = True
+TESTING = True
 API_ID = env('API_ID_TELEGRAM') #  captura la key para la api de telegram
 API_HASH = env('API_HASH_TELEGRAM')
 PHONE = env('PHONE_NUMBER') 
@@ -28,9 +30,12 @@ def main():
       #if 1: 
         #id=-1001381384148
         
-        loge.info(f"id: {id}")
-        ToolsPyrogram().get_history(client=app_tg,channel_id=int(id),limit=3,data_base="back_prueba",reverse=True)
-      
+        loge.info(f"----id-channel: {id}")
+        data_base="db_pasanti"
+        host = "mongodb://localhost:27017/"
+        ToolsPyrogram().get_history(client=app_tg,channel_id=int(id),limit=3000,data_base=data_base,reverse=True)
+      if TESTING:
+         apply_all_testing(host=host,db_name=data_base)
       sys.exit()
   else:
     app_tg.add_handler(MessageHandler(tools_pyrogram.send_message, tools_pyrogram.channel_filter_crypto())) #  Manejador de mensajes (funcion callback, filtro)
