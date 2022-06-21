@@ -28,7 +28,7 @@ class Inspector:
 	_percent_sl=3
 	_free = False
 
-	_is_entry_market = False
+	_is_entry_market = False # indica que la operacion entra con cualquier precio que este en el mercado siempre que este se encuentre en el rango de los precios de entrada.
 
 	_entry_targets = []
 	_take_profit_targets = []
