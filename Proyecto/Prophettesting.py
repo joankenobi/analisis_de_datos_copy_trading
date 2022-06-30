@@ -7,7 +7,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from ToolsProphet import *
+# import ToolsProphet5min import *
+import ToolsProphet5min as ToolsProphet
 from Binance_get_data import get_all_binance
 from Backtesting import Backtecting
 
@@ -112,11 +113,11 @@ class Prophettesting:
     def get_forecast_20_trend(self,df__sygnal_data:pd.DataFrame,i: int, df_train:pd.DataFrame):
         prophet=ToolsProphet()
         # pasar los datos a un formato prophet
-        df_train=prophet.to_data_for_prophet(df=df__sygnal_data,column_value="last")
+        df_train=prophet.to_data_for_prophet(df=df__sygnal_data,column_value="close")
         # obtener los mejores hiperparametros
-        best_params,score=prophet.get_best_hyperparameters(df_train=df_train,initial_days=50,period=365,horizon=20)
-        # Obtiene la tendencia de los proximos 20 dias segun prophet
-        forecast_future, forecast_trend=prophet.apply_prophet(df_train=df_train, days_future=20, best_params=best_params)
+        best_params,score=prophet.get_best_hyperparameters(df_train=df_train,initial_days=59,period=1,horizon=1)
+        # Obtiene la tendencia de los proximos 20 tiempos (5mins) segun prophet
+        forecast_future, forecast_trend=prophet.apply_prophet(df_train=df_train, times_future=20, best_params=best_params)
         # Guardar esa info junto al sygnal_data
         return best_params,forecast_future,forecast_trend,score
 
@@ -148,7 +149,7 @@ class Prophettesting:
                 ### slice data
                     loge.info(f"""---slice data """)    
 
-                    df_train=self.to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date)
+                    df_train=self.to_day_and_slice_time_for_period(df_symbol=df_symbol,column_time='date_myUTC', end_date=date, period="1440H",) # period="1440H = 60D
                     loge.info(f"""df_train= {df_train.shape} """)    
 
                 ### apply prophet
@@ -166,7 +167,7 @@ class Prophettesting:
                 ### compare value_day
                     loge.info(f"""---compare value_day """)    
                     trend_day=self.get_public_day_status(df_sygnal_data=df_sygnal_data,i=i,day_value=day_value)
-                    loge.info(f"""{day_name} = {trend_day} """)
+                    #loge.info(f"""{day_name} = {trend_day} """)
 
 
                 ### Update db
