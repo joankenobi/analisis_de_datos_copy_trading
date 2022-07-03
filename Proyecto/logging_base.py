@@ -10,6 +10,7 @@ loge.basicConfig(level=loge.INFO, #nivel de trabajo
     datefmt="%D %I:%M:%S %P", #d-m-y h:m:s pm
     handlers=[
         loge.FileHandler("log_pasanti.loge"), #info en doc.loge
+        # loge.FileHandler("capa_datos.loge"), #info en doc.loge
         loge.StreamHandler() #info en consola
     ]
 )

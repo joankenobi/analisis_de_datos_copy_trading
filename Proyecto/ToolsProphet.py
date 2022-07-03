@@ -28,13 +28,8 @@ class ToolsProphet:
 
       df_temp=df.copy()
       df_temp[column_time]=pd.to_datetime(df_temp[column_time])
-      data_by_day=df_temp.groupby(df_temp[column_time].dt.date).agg({column_value:['min', 'max', 'first', 'last']})
-      data_by_day=data_by_day[column_value]
-
-      data_by_day.reset_index(inplace=True) # combierte el index en columna
-      data_by_day[column_time]=pd.to_datetime(data_by_day[column_time]) # combierte la columna en datatime
-      data_by_day.set_index(column_time,drop=False,inplace=True) # combierte la columna en index y mantiene la columna 
-      return data_by_day
+      df_temp.set_index(column_time,drop=False,inplace=True) # combierte la columna en index y mantiene la columna 
+      return df_temp
 
     def to_data_for_prophet(self,df:pd.DataFrame,column_value:str)-> pd.DataFrame:
       df_temp=df.copy()
@@ -44,28 +39,28 @@ class ToolsProphet:
       df_for_prophet["ds"]=pd.to_datetime(df_for_prophet["ds"],errors="coerce")
       return df_for_prophet
 
-    def train_and_test(self,df:pd.DataFrame, days_test:int) -> tuple:
-      df_train=df[:len(df) - days_test]
-      df_test=df[len(df) - days_test:]
+    def train_and_test(self,df:pd.DataFrame, hours_test:int) -> tuple:
+      df_train=df[:len(df) - hours_test]
+      df_test=df[len(df) - hours_test:]
 
       print(f'df_train len: {len(df_train["ds"])}')
       print(f'df_train time range: {df_train["ds"].min()} - {df_train["ds"].max()}')
       print(f'df_test time range: {df_test["ds"].min()} - {df_test["ds"].max()}')
       return df_train, df_test
 
-    def apply_prophet(self,df_train, days_future, best_params:dict=None):
+    def apply_prophet(self,df_train, times_future, best_params:dict=None):
     
       m=Prophet()
       if best_params:
         m=Prophet(**best_params)
     
       m.fit(df_train)
-      df_future=m.make_future_dataframe(periods=days_future)
+      df_future=m.make_future_dataframe(periods=times_future, freq="5min")
       print(f'df_future time range: {df_future["ds"].min()} - {df_future["ds"].max()}')
       forecast_future=m.predict(df_future)
       print(f'forecast_future time range: {forecast_future["ds"].min()} - {forecast_future["ds"].max()}')
       forecast_future["name_day"]=forecast_future.ds.dt.day_name()
-      forescast_days=forecast_future[len(forecast_future)-days_future:]["trend"]
+      forescast_days=forecast_future[len(forecast_future)-times_future:]["trend"]
       forescast_trend="long"
       if forescast_days.iloc[0]>forescast_days.iloc[-1]:
         forescast_trend="short"
@@ -84,10 +79,10 @@ class ToolsProphet:
       #x_range_show=[date(2021,1,1),date(2022,5,15)]
 
       # Plot the predictions
-      ax.plot(forecast_future['ds'], forecast_future.trend, marker='x' )
-      ax.plot(forecast_future['ds'], forecast_future.yhat, marker='_')
-      ax.plot(forecast_future['ds'], forecast_future.yhat_lower, marker='')
-      ax.plot(forecast_future['ds'], forecast_future.yhat_upper, marker='')
+      ax.plot(forecast_future['ds'], forecast_future.trend, marker='.')
+      ax.plot(forecast_future['ds'], forecast_future.yhat, marker='.')
+      ax.plot(forecast_future['ds'], forecast_future.yhat_lower, marker='.')
+      ax.plot(forecast_future['ds'], forecast_future.yhat_upper, marker='.')
       if len(df_test):
         ax.plot(df_test['ds'], df_test["y"])
         list_legends.append("test")
@@ -101,12 +96,12 @@ class ToolsProphet:
         plt.savefig(saved_name)
       plt.show()
 
-    def get_best_hyperparameters(self,df_train:pd.DataFrame,initial_days:int=1000, period:int=365, horizon:int=20, param_grid:dict=None)-> dict:
+    def get_best_hyperparameters(self,df_train:pd.DataFrame,initial_days:int=364, period:int=1, horizon:int=1, param_grid:dict=None)-> dict:
       if param_grid==None:
           param_grid = {
             #"growth":['linear','logistic'],
-            'changepoint_prior_scale': [0.05, 0.1, 0.5, 2.5],  # default 0.05 Increasing changepoint_prior_scale will make the trend more flexible and result in overfitting. Decreasing the changepoint_prior_scale will make the trend less flexible and result in underfitting.
-            'seasonality_prior_scale': [10,5,1,0.1, 0.01, 0.009, 0.005],  # default 10
+            'changepoint_prior_scale': [0.05, 2.5],  # default 0.05 Increasing changepoint_prior_scale will make the trend more flexible and result in overfitting. Decreasing the changepoint_prior_scale will make the trend less flexible and result in underfitting.
+            'seasonality_prior_scale': [10, 0.01],  # default 10
             'seasonality_mode': ["additive", "multiplicative"],
             #'daily_seasonality':[True,False]
             }
@@ -126,22 +121,13 @@ class ToolsProphet:
 
         m.fit(df_train)  # Fit model with given params
 
-        #initial_forecast_date = '1980-01-01'
-        #initial = str(
-        #    abs(data[data.ds > initial_forecast_date].shape[0] - data.shape[0])) + ' days'
-
-    # tendremos 100 años de entrenamiento fijos
-    # luego haremos predicciones cada 10 años de 5 años de ventana de prediccion
-    # sucesivamente hasta que los datos se agoten.
-
         df_cv = cross_validation(
-            m, initial=f"{initial_days}"+' days', period=f"{period}"+' days', horizon=f"{horizon}"+' days', parallel="processes")
+            m, initial=f"{initial_days}"+' days', period=f"{period}"+' days', horizon=f"{horizon}"+' hours', parallel="processes")
         df_p = performance_metrics(df_cv, rolling_window=5, )
 
         rmses.append(df_p['rmse'].values[0])
         mapes.append(df_p['mape'].values[0])
-        maes.append(df_p['mae'].values[0])  # USAMOS EL MAE
-
+        maes.append(df_p['mae'].values[0])
 
       tuning_results = pd.DataFrame(all_params)
 
@@ -169,18 +155,23 @@ class ToolsProphet:
 if __name__== "__main__":
 
 
-    df=pd.read_pickle("../BCHUSDT-5m-data.pickle")
-    df=ToolsProphet.to_days_data(df=df, column_time="date_myUTC", column_value="close")
+    df=pd.read_pickle("/home/joan/Documentos/Programacion/Python/Pasantias/BCHUSDT-5m-data.pickle")
+    df=ToolsProphet().to_days_data(df=df, column_time="date_myUTC", column_value="close")
     df.sample(5)
 #%%
  
-    df=ToolsProphet.to_data_for_prophet(df=df, column_value="last")
-    df_train, df_test= ToolsProphet.train_and_test(df=df, days_test= 20)
+    df=ToolsProphet().to_data_for_prophet(df=df, column_value="close")
+#%%
+    df_train, df_test= ToolsProphet().train_and_test(df=df, hours_test= 20)
+#%%
     #best_params=ToolsProphet.get_best_hyperparameters(df_train=df_train,initial_days=1000,period=100,horizon=20)
     #best_params={'changepoint_prior_scale': 0.1, 'seasonality_prior_scale': 10, 'seasonality_mode': 'multiplicative'}
     best_params={'changepoint_prior_scale': 2.5, 'seasonality_prior_scale': 0.005, 'seasonality_mode': 'multiplicative'}
-    forecast_future, forecast_trend=ToolsProphet.apply_prophet(df_train=df_train, days_future=20, best_params=best_params)
+#%%
+    forecast_future, forecast_trend=ToolsProphet().apply_prophet(df_train=df_train, times_future=20, best_params=None)
     print(forecast_trend)
+#%%
     ToolsProphet.plot_prediction(df_train=df_train, df_test=df_test,forecast_future=forecast_future, saved_name="grafica",x_range_show=[date(2021,1,1),date(2022,5,15)])
+#%%
     day_value=ToolsProphet.get_lowerupper_day(forecast_future)
     print(day_value)

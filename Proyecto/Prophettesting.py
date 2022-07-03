@@ -4,11 +4,14 @@
 # - 
 
 # from calendar import day_name, week
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
 
 # import ToolsProphet5min import *
-import ToolsProphet5min as ToolsProphet
+from ToolsProphet import*
 from Binance_get_data import get_all_binance
 from Backtesting import Backtecting
 
@@ -58,6 +61,12 @@ class Prophettesting:
         symbol=df_sygnal_data.loc[i,"symbol"]
         loge.info(f"""symbol= {symbol} """)    
         # Ver si hay data de la misma
+        filename = '%s-%s-data.pickle' %(symbol, "5m")
+
+        if os.path.isfile(filename): # si consigue el archivo lo lee
+            df_symbol = pd.read_pickle(filename)
+            return df_symbol
+        loge.info(f"""filename conseguido: {filename}""")
         # Si no hay, debe descargarla
         df_symbol=get_all_binance(symbol=symbol,kline_size="5m",save=True)
         # Esta data es la que hará de df_symbol
@@ -82,7 +91,9 @@ class Prophettesting:
         # Esta es definitivamente el df_train 
         #df_symbol[column_time]=pd.to_datetime(df_symbol[column_time])
         # pass to a day period
+        loge.info("call prophet")
         prophet=ToolsProphet()
+        loge.info("to days data")
         df_symbol=prophet.to_days_data(df=df_symbol,column_time=column_time, column_value=column_value)
         df_train=df_symbol[df_symbol[column_time]<=end_date].last(period)
         return df_train
@@ -115,7 +126,7 @@ class Prophettesting:
         # pasar los datos a un formato prophet
         df_train=prophet.to_data_for_prophet(df=df__sygnal_data,column_value="close")
         # obtener los mejores hiperparametros
-        best_params,score=prophet.get_best_hyperparameters(df_train=df_train,initial_days=59,period=1,horizon=1)
+        best_params,score=prophet.get_best_hyperparameters(df_train=df_train,initial_days=59,period=2,horizon=1)
         # Obtiene la tendencia de los proximos 20 tiempos (5mins) segun prophet
         forecast_future, forecast_trend=prophet.apply_prophet(df_train=df_train, times_future=20, best_params=best_params)
         # Guardar esa info junto al sygnal_data
@@ -126,7 +137,7 @@ class Prophettesting:
         #i=0
         #if i==0:
         for i in range(len(df_sygnal_data)):
-            if ("error_prophettesting" in df_sygnal_data.loc[i].dropna(inplace=False).index or "best_params" in df_sygnal_data.loc[i].dropna(inplace=False).index) and pass_sygnal:
+            if ("Colocar lo que iba antes" in df_sygnal_data.iloc[i].dropna(inplace=False).index or "score" in df_sygnal_data.iloc[i].dropna(inplace=False).index) and pass_sygnal:
                 
                 loge.info(f"""se salto la señal ya testeada nro {i}""")    
                 pass 
@@ -196,4 +207,5 @@ if __name__ == "__main__":
     data = db.signals.find()
     list_data = list(data)
     df_sygnal_data = pd.DataFrame(list_data)
-    Prophettesting().apply_prophettesting(df_sygnal_data, db_name,pass_sygnal=True)
+    df_sygnal_data = df_sygnal_data.iloc[:2]
+    Prophettesting().apply_prophettesting(df_sygnal_data, db_name,pass_sygnal=False)
