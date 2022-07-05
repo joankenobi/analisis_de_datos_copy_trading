@@ -101,7 +101,7 @@ class ToolsProphet:
           param_grid = {
             #"growth":['linear','logistic'],
             'changepoint_prior_scale': [0.05, 2.5],  # default 0.05 Increasing changepoint_prior_scale will make the trend more flexible and result in overfitting. Decreasing the changepoint_prior_scale will make the trend less flexible and result in underfitting.
-            'seasonality_prior_scale': [10, 0.01],  # default 10
+            'seasonality_prior_scale': [0.01],  # default 10
             'seasonality_mode': ["additive", "multiplicative"],
             #'daily_seasonality':[True,False]
             }
