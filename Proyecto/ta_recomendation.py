@@ -192,7 +192,7 @@ def apply_ta_recomendation(df_sygnal_data:pd.DataFrame,pass_sygnal=False):
 
                 df_symbol=Prophettesting().get_symbol_data(df_sygnal_data,i)
                 loge.info(f"""df_symbol= {df_symbol.columns} """)    
-            # slice el hitorial 1y atars de la publicacion
+            # slice el hitorial 1y atras de la publicacion
             # pasar los datos a formato de días
             ### slice data
                 loge.info(f"""---slice data """)    
