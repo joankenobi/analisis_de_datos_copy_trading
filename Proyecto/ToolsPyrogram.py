@@ -12,10 +12,10 @@ from logging_base import loge
 env = Env()
 env.read_env()
 PROD = env.bool('PROD',False) 
-CHANNEL_IDS = env.list('CHANNEL_IDS'if PROD else'CHANNEL_IDS_TEST',subcast=int) #  captura los canales.id de produccion o test
+CHANNEL_IDS = env.list('CHANNELS_IDS'if PROD else'CHANNELS_IDS_TEST',subcast=int) #  captura los canales.id de produccion o test
 CHANNEL_NAMES = env.list('CHANNEL_NAMES') if PROD else env.list('CHANNEL_NAMES_TEST') #  captura los canales.nombres de produccion o test
-CHANNEL_ID_CONSOLE = env.int('CHANNEL_ID_CONSOLE') if PROD else "-1001771813711" #env.int('CHANNEL_ID_CONSOLE_TEST')
-ID_MY_CHANNEL_SEND_MESSAGE = env.int('ID_MY_CHANNEL_SEND_MESSAGE') if PROD else env.int('ID_MY_CHANNEL_SEND_MESSAGE_TEST')
+ID_CHAT_CONSOLE = env.int('ID_CHAT_CONSOLE') if PROD else "-1001771813711" #env.int('ID_CHAT_CONSOLE_TEST')
+ID_MY_CHANNEL_SELL_PRODUCT = env.int('ID_MY_CHANNEL_SELL_PRODUCT') if PROD else env.int('ID_MY_CHANNEL_SELL_PRODUCT_TEST')
 
 class ToolsPyrogram:
 
@@ -41,19 +41,19 @@ class ToolsPyrogram:
 						
 			if len(data): #  si el tamaño de la data != 0
 				
-				await message.forward(CHANNEL_ID_CONSOLE) #  envia el mensaje al canal consola
+				await message.forward(ID_CHAT_CONSOLE) #  envia el mensaje al canal consola
 				text = self.prepare_text(data)
-				await client.send_message(CHANNEL_ID_CONSOLE, text) #  envia la data preparada al canal de consola
+				await client.send_message(ID_CHAT_CONSOLE, text) #  envia la data preparada al canal de consola
 			
 				e_trader = ""
 				if len(e_trader['errors']):
 						text = self.prepare_text(e_trader, True, data['symbol_message'])
-						await client.send_message(CHANNEL_ID_CONSOLE, text) #  Envia los errores de trading al canal de consola
+						await client.send_message(ID_CHAT_CONSOLE, text) #  Envia los errores de trading al canal de consola
 
 		except:
 			self.set_errors()
 			text = json.dumps(self.get_errors(), indent=2)
-			await client.send_message(CHANNEL_ID_CONSOLE, text) # envia los errores del proceso al canal de consola.
+			await client.send_message(ID_CHAT_CONSOLE, text) # envia los errores del proceso al canal de consola.
 
 	async def get_data(self,client):
 		"""
@@ -68,7 +68,7 @@ class ToolsPyrogram:
 			return self.__inspectM.get_data()
 		errors = self.__inspectM.get_errors()
 		mg = self.prepare_text(errors, True)
-		await client.send_message(CHANNEL_ID_CONSOLE, mg) #  envia los errores al canal de consola
+		await client.send_message(ID_CHAT_CONSOLE, mg) #  envia los errores al canal de consola
 		return []
 
 	def channel_filter_crypto(self):

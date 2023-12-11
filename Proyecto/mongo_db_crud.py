@@ -38,7 +38,7 @@ class Mongodb:
         try:
             self._client= mongo.MongoClient(self._connection_string)
             self._db=self._client[name_db]
-            loge.info(f"Conectado a cluster con los DBs: ({self._client.database_names()}), DB fijado: ({name_db})")
+            loge.info(f">>>>>>> Conectado a cluster con los DBs: ({self._client.list_database_names()}), DB fijado: ({name_db})")
             return self._db
 
         except Exception as e:
@@ -89,8 +89,8 @@ class Mongodb:
 
 if __name__ == "__main__":
 
-    db=Mongodb("mongodb://localhost:27017/").set_db("joan33")
-    #db.create_collection("joan33")
-    #Mongodb().Insert_data("coll",{"joan":"blanco"})
-    Mongodb().update_by_id("coll","624cd81b376a72e60ac7bfe6","man","yes")
+    db=Mongodb("mongodb://localhost:27017").set_db("joan33")
+    # db.create_collection("joan33")
+    # Mongodb.Insert_data("coll",{"joan":"blanco"})
+    # Mongodb.update_by_id("coll","657624ee479c8fb930008e3c","man","yes")
     

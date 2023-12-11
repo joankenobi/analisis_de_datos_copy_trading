@@ -354,7 +354,7 @@ class Backtecting:
 if __name__ == "__main__":
 
     host = "mongodb://localhost:27017/"
-    db_name = "db_pasanti"
+    db_name = "binance"
     db = Mongodb(host).set_db(db_name)
     data = db.signals.find()
     list_data = list(data)
