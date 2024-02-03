@@ -43,10 +43,6 @@ Riesgos y Contingencias
 
 Existe la posibilidad de que no haya un patrón que dé los resultados esperados debido a la alta variación que tienen los precios de las criptomonedas, al haber ese riesgo la sugerencia sería pasar a realizar un trading automático clásico planteando una estrategia con análisis técnicos, este proceso puede tomar aún más tiempo y recursos que el proyecto original.
 
-Terminologías
-
-- Las terminologías son presentadas en el capítulo III del presente documento.
-
 ### Determinar los Objetivos del DM
 
 El objetivo del DM es predecir la eficiencia de las operaciones al realizar el copy trading antes de que esta operación termine su ejecución. Esto deberá lograrse por medio de un análisis de datos y la implementación de machine learning para clasificar las operaciones, evaluando la eficiencia del canal que publica la operación, la eficiencia de la moneda en la operación, y otros indicadores.
