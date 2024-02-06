@@ -12,7 +12,7 @@ Prueba/*
 */Prueba
 *.pickle
 *.csv
-*.png
+Proyecto/*.png
 *.loge
 ../*.pickle
 ATOMBTC-5m-data.pickle
